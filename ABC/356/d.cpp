@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+#include <set>
+#include <queue>
+#include <utility>
+#include <map>
+#include <regex>
+#include <math.h>
+#include <random>
+#include <algorithm>
+#define pb push_back
+#define all(x) begin(x), end(x)
+#define gall(x) begin(x), end(x), greater<>()
+#define ll long long
+#define rep(i,x) for(int i=0;i<x;i++)
+#define P pair<int, int>
+#define lP pair<ll, ll>
+using namespace std;
+using namespace atcoder;
+using mint = modint998244353;
+
+
+
+int main()
+{
+    ll n,m;
+    cin >> n>>m;
+
+    mint ans = 0;
+    rep(i, 60) {
+        if (m >> i & 1) {
+            ll p = 2ll << i;
+            ll r = n % p;
+            ans += (n-r)/2;
+            if (r >= (1ll << i)) {
+                ans += r - (1ll << i) + 1;
+            }
+        }
+    }
+
+    cout << ans.val() << endl;
+    return 0;
+}
