@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+#include <set>
+#include <unordered_set>
+#include <queue>
+#include <stack>
+#include <utility>
+#include <map>
+#include <regex>
+#include <math.h>
+#include <random>
+#include <algorithm>
+#define pb push_back
+#define eb emplace_back
+#define all(x) begin(x), end(x)
+#define gall(x) begin(x), end(x), greater<>()
+#define ll long long
+#define rep(i,x) for(int i=0;i<x;i++)
+#define P pair<int, int>
+#define lP pair<ll, ll>
+using namespace std;
+using namespace atcoder;
+void chmin(ll &a, ll b) { a = min(a, b); }
+void chmax(ll &a, ll b) { a = max(a, b); }
+
+
+int main()
+{
+    //freopen("input.txt", "r", stdin);
+    ll n; cin>>n;
+    vector<ll> s;
+    rep(i,n) {
+        ll a; cin>>a;
+        s.pb(a);
+        if (s.size() >= 4) {
+            int sn = s.size();
+            bool f = true;
+            for (int i = sn - 2;i >= sn - 4;i--) {
+                if (s[i] != s[sn-1]) f = false;
+            }
+            if (f) {
+                rep(i,4) s.pop_back();
+            }
+        }
+    }
+
+    cout << s.size() << endl;
+
+    return 0;
+}

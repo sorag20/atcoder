@@ -15,8 +15,8 @@
         "-I${workspaceFolder}/ac-library",
         "-I${workspaceFolder}/bits",
         "-o",
-        "'${workspaceFolder}/problem.exe'",
-        "'${file}'"
+        "${workspaceFolder}/problem.exe",
+        "${file}"
       ],
       "group": {
         "kind": "build",

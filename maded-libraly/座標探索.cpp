@@ -1,0 +1,2 @@
+const int dx[] = {1, 0, -1, 0};
+const int dy[] = {0, 1, 0, -1};
