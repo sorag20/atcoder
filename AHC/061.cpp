@@ -121,80 +121,209 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
 
+// AI関連の関数（将来の改善用にコメントアウトして保持）
+/*
+// AIプレイヤーpのマス(i,j)に対する評価値を計算
+ld calc_eval(ll p, ll i, ll j, ll n, ll m, ll u, vvl& v, vvl& o, vvl& l, vvld& internal_setting) {
+    ld wa = internal_setting[p][0];
+    ld wb = internal_setting[p][1];
+    ld wc = internal_setting[p][2];
+    ld wd = internal_setting[p][3];
+
+    ll owner = o[i][j];
+    ll level = l[i][j];
+    ld value = v[i][j];
+
+    // 誰の領土でもない場合
+    if (owner == -1) {
+        return value * wa;
+    }
+    // 自分の領土の場合（プレイヤーpは1-indexed: p+1）
+    else if (owner == p + 1) {
+        if (level < u) {
+            return value * wb;
+        } else {
+            return 0;
+        }
+    }
+    // 他のプレイヤーの領土の場合
+    else {
+        if (level == 1) {
+            return value * wc;
+        } else {
+            return value * wd;
+        }
+    }
+}
+
+// プレイヤーpの移動可能なマスを列挙
+vc<lP> get_movable(ll px, ll py, ll n, set<lP>& occupied) {
+    vc<lP> movable;
+    vl dx = {1, 0, -1, 0};
+    vl dy = {0, 1, 0, -1};
+
+    rep(i, 4) {
+        ll nx = px + dx[i];
+        ll ny = py + dy[i];
+        if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+        if (occupied.find({nx, ny}) != occupied.end()) continue;
+        movable.pb({nx, ny});
+    }
+
+    return movable;
+}
+
+// ゲーム状態を更新する（移動後の領土とレベルの変化）
+void update_game_state(ll player_id, ll x, ll y, ll u, vvl& o, vvl& l) {
+    // player_idは0-indexed (0が自分、1以降がAI)
+    ll owner = o[x][y];
+    ll level = l[x][y];
+
+    if (owner == -1) {
+        // 誰の領土でもない場合: 自分の領土になる(レベル1)
+        o[x][y] = player_id;
+        l[x][y] = 1;
+    } else if (owner == player_id) {
+        // 自分の領土の場合: レベルをuまで上げる
+        if (level < u) {
+            l[x][y] = level + 1;
+        }
+    } else {
+        // 他のプレイヤーの領土の場合: レベルを下げる
+        if (level == 1) {
+            // レベル1なら奪い取る
+            o[x][y] = player_id;
+            l[x][y] = 1;
+        } else {
+            // レベル2以上ならレベルを1下げる
+            l[x][y] = level - 1;
+        }
+    }
+}
+
+// AIプレイヤーpの行動を決定
+lP decide_ai_move(ll p, vc<lP>& exy, ll n, ll m, ll u, vvl& v, vvl& o, vvl& l,
+                  vvld& internal_setting, set<lP>& occupied, ld r1, ld r2) {
+    ll px = exy[p + 1].first;
+    ll py = exy[p + 1].second;
+    ld eps = internal_setting[p][4];
+
+    // 移動可能なマスを取得
+    vc<lP> movable = get_movable(px, py, n, occupied);
+
+    if (movable.empty()) {
+        return {px, py}; // 移動できない場合は現在位置を返す
+    }
+
+    // ランダム行動 vs 貪欲行動の決定
+    if (r1 < eps) {
+        // ランダム行動
+        ll idx = (ll)(r2 * movable.size());
+        return movable[idx];
+    } else {
+        // 貪欲行動
+        ld max_eval = -1e18;
+        vc<lP> best_moves;
+
+        for (auto [i, j] : movable) {
+            ld eval = calc_eval(p, i, j, n, m, u, v, o, l, internal_setting);
+            if (eval > max_eval) {
+                max_eval = eval;
+                best_moves.clear();
+                best_moves.pb({i, j});
+            } else if (abs(eval - max_eval) < 1e-9) {
+                best_moves.pb({i, j});
+            }
+        }
+
+        ll idx = (ll)(r2 * best_moves.size());
+        return best_moves[idx];
+    }
+}
+*/
+
 int main()
 {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-
     ll n,m,t,u;
     cin >> n >> m>> t>>u;
     vvl v(n,vl(n));
     cin>>v;
-    vc<lP> p(m);
     vc<lP> exy(m);
     set<lP> st;
     rep(i,m) {
-        ll x,y; cin>>x>>y;
-        x--;y--;
-        exy[i] = {x,y};
-        st.insert({x,y});
-    }
-    vvld internal_setting(m-1);
-    rep(i,m-1) {
-        ld wa, wb, wc, wd, eps;
-        cin >> wa >> wb >> wc >> wd >> eps;
-        internal_setting[i] = {wa, wb, wc, wd, eps};
+        ll row,col; cin>>row>>col;
+        exy[i] = {row,col};
+        st.insert({row,col});
     }
     lP me = {exy[0].first, exy[0].second};
     auto random_ct = mt19937(10);
 
     vc<lP> txy(m);
-    vvl o(n,vl(n));
-    vvl l(n,vl(n));
+    vvl o(n,vl(n,-1));
+    vvl l(n,vl(n,0));
+
+    rep(i,m) {
+        ll x = exy[i].first;
+        ll y = exy[i].second;
+        o[x][y] = i;
+        l[x][y] = 1;
+    }
+    ll turn_count = 0;
     while(t--) {
+        if (turn_count > 0) {
+            rep(i,m) {
+                ll x,y; cin>>x>>y;
+                txy[i] = {x,y};
+            }
+
+            st.clear();
+            rep(i,m) {
+                ll x,y; cin>>x>>y;
+                exy[i] = {x,y};
+                st.insert({x,y});
+            }
+            me = {exy[0].first, exy[0].second};
+
+            rep(i,n) {
+                rep(j,n) {
+                    ll k; cin>>k;
+                    o[i][j] = k;
+                }
+            }
+
+            rep(i,n) {
+                rep(j,n) {
+                    ll k; cin>>k;
+                    l[i][j] = k;
+                }
+            }
+        }
+
+       // プレイヤー0の移動を決定（他のプレイヤーの位置を避ける）
+        ll nrow, ncol;
         while(1) {
             ll di = random_ct()%4;
-            ll nx = me.first + dx[di];
-            ll ny = me.second + dy[di];
-            if (nx < 0 || nx >= n || ny< 0 || nx >= n) continue;
-            if (st.find({nx,ny}) == st.end()) {
-                cout << nx << " " << ny << endl;
+            nrow = me.first + dx[di];
+            ncol = me.second + dy[di];
+            if (nrow < 0 || nrow >= n || ncol < 0 || ncol >= n) continue;
+
+            bool occupied = false;
+            rep(i,m) {
+                if (i == 0) continue;
+                if (exy[i].first == nrow && exy[i].second == ncol) {
+                    occupied = true;
+                    break;
+                }
+            }
+            if (!occupied) {
                 break;
             }
         }
-        rep(i,m-1) {
-            ld r1, r2;
-            cin >> r1 >> r2;
-            // r1: ランダム行動 vs 貪欲行動の決定に使用
-            // r2: 移動先の選択に使用
-        }
-        /*
-        rep(i,m) {
-            ll x,y; cin>>x>>y;
-            x--;y--;
-            txy[i] = {x,y};
-        }
-        st.clear();
-        rep(i,m) {
-            ll x,y; cin>>x>>y;
-            x--;y--;
-            exy[i] = {x,y};
-            st.insert({x,y});
-        }
-        me = {exy[0].first, exy[0].second};
-        rep(i,n) {
-            rep(j,n) {
-                ll k; cin>>k;
-                o[i][j] = k;
-            }
-        }
-        rep(i,n) {
-            rep(j,n) {
-                ll k; cin>>k;
-                l[i][j] = k;
-            }
-        }
-        */
+
+        cout << nrow << " " << ncol << endl;
+        cout.flush();
+        me = {nrow, ncol};
+        turn_count++;
     }
 
     return 0;
