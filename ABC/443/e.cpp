@@ -130,8 +130,29 @@ int main()
     while(t--) {
         ll n,c; cin>>n>>c;
         vs s(n); cin>>s;
+        rep(i,n) s[i] = "#"+s[i]+"#";
+        ll w = n+2;
+         vvb dp(n,vb(w));
+         dp[n-1][c] = true;
+         vl bottom(w,n);
+         rep(i,n)rep(j,w) if(s[i][j] == '#') bottom[j] = i;
 
-        
+         drep(i,n-1) {
+            nfor(j,1,n+1) {
+                if (!dp[i+1][j-1] && !dp[i+1][j] && !dp[i+1][j+1]) continue;
+                if (s[i][j] == '#' ) {
+                    if (bottom[j] != i) continue;
+                    rep(ni,n) s[ni][j] = '.';
+                }
+                dp[i][j] = true;
+            }
+         }
+         string ans;
+         nfor(j,1,n+1) {
+            if (dp[0][j]) ans += '1';
+            else ans += '0';
+         }
+         cout << ans << endl;
     }
 
     return 0;

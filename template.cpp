@@ -20,8 +20,8 @@ using namespace atcoder;
 //-------------1.型系---------------
 //ll const INF = 2e18;
 
-//using mint = modint998244353;
-using mint = modint1000000007;
+using mint = modint998244353;
+//using mint = modint1000000007;
 //using mint = modint;
 //mint::set_mod(m); // main関数内で書く
 template<typename T> using vc = vector<T>;
@@ -55,10 +55,10 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 void chmin(ll &a, ll b) { a = min(a, b); }
 void chmax(ll &a, ll b) { a = max(a, b); }
 
-#define YES cout<<"Yes"<<endl
-#define NO cout<<"No"<<endl
+#define YES cout<<"Yes"<<endl;
+#define NO cout<<"No"<<endl;
 #define YN {cout<<"Yes"<<endl;}else{cout<<"No"<<endl;}// if(a==b)YN;
-#define dame cout<<-1<<endl
+#define dame cout<<-1<<endl;
 
 // ↓必ず、直前にsort(all(v));を入れないとuniqueが正しく動作しない
 #define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
@@ -75,14 +75,14 @@ bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
     return (!(0 <= i && i < h && 0 <= j && j < w));
 }
 
-#define vvl_rotate(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[j][n-i-1]=v[i][j];swap(nx,v);}//時計回りに90°回転
-#define vvl_rrotate(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[n-j-1][i]=v[i][j];swap(nx,v);}//反時計周りに90°回転
+#define vvl_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//時計回りに90°回転
+#define vvl_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//反時計周りに90°回転
 
-#define vs_rotate(v) {ll n = size(v);vs nx(n,string(n,'.'));rep(i,n)rep(j,n)nx[j][n-i-1]=v[i][j];swap(nx,v);}//文字列版 時計回りに90°回転
-#define vs_rrotate(v) {ll n = size(v);vs nx(n,string(n,'.'));rep(i,n)rep(j,n)nx[n-j-1][i]=v[i][j];swap(nx,v);}//文字列版　反時計周りに90°回転
+#define vs_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//文字列版 時計回りに90°回転
+#define vs_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//文字列版　反時計周りに90°回転
 
-#define vvl_tenti(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[j][i]=v[i][j];swap(nx,v);}
-#define vs_tenti(v) {ll n = size(v); vs nx(n, string(n,'.')); rep(i, n)rep(j, n)nx[j][i] = v[i][j]; swap(nx, v);}
+#define vvl_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][i]=v[i][j];swap(nx,v);}
+#define vs_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][i] = v[i][j]; swap(nx, v);}
 
 //-----------5.数学系--------------
 #define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
@@ -114,6 +114,7 @@ ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
 //-----------6.デバックや出力系------------------
 void print(ld x) { printf("%.20Lf\n", x); }
 
+#define out(v) {cout<<v<<endl;}
 #define v_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<' ';cout<<endl;}//一次元配列を出力する
 #define vv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
