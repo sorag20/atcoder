@@ -126,8 +126,47 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll H,W,n;
+    cin >> H>>W>>n;
+    map<ll, vl> mph, mpw;
+    vl h(n), w(n);
+    rep(i,n) {
+        cin>>h[i]>>w[i];
+        mph[h[i]].pb(i);
+        mpw[w[i]].pb(i);
+    }
+    vb used(n);
+    vc<lP> ans(n);
+    ll r = 1, c = 1;
+    ll cnt = 0;
+    while(cnt != n) {
+        if (mph.count(H)) {
+            while(mph[H].size() && used[mph[H].back()]) mph[H].pob();
+            if (!mph[H].size()) {
+                mph.erase(H);
+                continue;
+            };
+            ll i = mph[H].back();
+            used[i] = true;
+            ans[i] = {r,c};
+            cnt++;
+            c += w[i]; W-=w[i];
+        } else if (mpw.count(W)) {
+            while(mpw[W].size() && used[mpw[W].back()]) mpw[W].pob();
+            if (!mpw[W].size()) {
+                mpw.erase(W);
+                continue;
+            }
+            ll i = mpw[W].back();
+            used[i] = true;
+            ans[i] = {r,c};
+            cnt++;
+            r += h[i]; H-=h[i];
+        }
+    }
+    for (auto [r,c]:ans) {
+        cout << r << " " << c << endl;
+    }
 
     return 0;
 }

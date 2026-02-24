@@ -1,321 +1,258 @@
 #include <bits/stdc++.h>
 #include <atcoder/all>
-#include <set>
-#include <unordered_set>
-#include <queue>
-#include <stack>
-#include <utility>
-#include <map>
-#include <regex>
-#include <math.h>
 #include <random>
-#include <algorithm>
-#define ll long long
-#define ld long double
-#define P pair<int, int>
-#define lP pair<ll, ll>
-#define ldP pair<ld, ld>
 using namespace std;
 using namespace atcoder;
-//-------------1.型系---------------
-//ll const INF = 2e18;
 
-using mint = modint998244353;
-//using mint = modint1000000007;
-//using mint = modint;
-//mint::set_mod(m); // main関数内で書く
-template<typename T> using vc = vector<T>;
-template<typename T> using vvc = vc<vc<T>>;
-template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
-template<class T> using pq_g = priority_queue<T, vc<T>, greater<T>>;//小さい順
-
-//-------------2.配列系--------------
-using vl = vc<ll>; using vvl = vvc<ll>; using vvvl = vvc<vl>; using vvvvl = vvc<vvl>;
-using vs = vc<string>; using vvs = vvc<string>;
-using vb = vc<bool>; using vvb = vvc<bool>; using vvvb = vvc<bool>;
-using vld = vc<ld>; using vvld = vvc<ld>; using vvvld = vvc<vld>;
-using vmint = vc<mint>; using vvmint = vvc<mint>; using vvvmint = vvc<vmint>;
+#define ll long long
 #define rep(i,x) for(ll i=0;i<x;i++)
-template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))i >> v[j]; return i; }
+using lP = pair<ll, ll>;
+using vl = vector<ll>;
+using vvl = vector<vl>;
+template<typename T> using vc = vector<T>;
 
-//--------3.コード短縮化---------
-#define pb push_back
-#define eb emplace_back
-#define em emplace
-#define pob pop_back
+vl dx = {1, 0, -1, 0};
+vl dy = {0, 1, 0, -1};
 
-#define rrep(i,x) for(ll i=1;i<=x;i++)
-#define drep(i,x) for(ll i=x-1;i>=0;i--)
-#define nfor(i,s,n) for(ll i=s;i<n;i++)//i=s,s+1...n-1 ノーマルfor
-#define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
+mt19937 rng(42);
 
-#define all(x) begin(x), end(x)
-#define gall(x) begin(x), end(x), greater<>()
+// 評価関数
+ll calc_score(ll n, ll u, vvl& v, vvl& o, vvl& l) {
+    ll score = 0;
+    ll territory_count = 0;
+    ll max_level_count = 0;
+    ll high_value_territory = 0;
+    ll cluster_bonus = 0;
 
-void chmin(ll &a, ll b) { a = min(a, b); }
-void chmax(ll &a, ll b) { a = max(a, b); }
+    rep(i, n) {
+        rep(j, n) {
+            if (o[i][j] == 0) {
+                ll base = v[i][j] * l[i][j];
+                score += base;
 
-#define YES cout<<"Yes"<<endl;
-#define NO cout<<"No"<<endl;
-#define YN {cout<<"Yes"<<endl;}else{cout<<"No"<<endl;}// if(a==b)YN;
-#define dame cout<<-1<<endl;
+                // レベルの3乗でボーナス
+                score += base * l[i][j] * l[i][j] / 15;
 
-// ↓必ず、直前にsort(all(v));を入れないとuniqueが正しく動作しない
-#define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
-#define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
+                territory_count++;
 
-#define pop_cnt(s) ((ll)__builtin_popcountll(s))
-#define next_p(v) next_permutation(v.begin(),v.end())
+                if (v[i][j] >= 8) {
+                    high_value_territory++;
+                    score += base / 2;
+                }
 
-//---------4.グリッド系----------
-vl dx = { 1,0,-1,0 };//vl dx={1,1,0,-1,-1,-1,0,1};
-vl dy = { 0,1,0,-1 };//vl dy={0,1,1,1,0,-1,-1,-1};
+                if (l[i][j] == u) {
+                    score += v[i][j] * 25;
+                    max_level_count++;
+                }
 
-bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
-    return (!(0 <= i && i < h && 0 <= j && j < w));
-}
-
-#define vvl_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//時計回りに90°回転
-#define vvl_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//反時計周りに90°回転
-
-#define vs_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//文字列版 時計回りに90°回転
-#define vs_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//文字列版　反時計周りに90°回転
-
-#define vvl_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][i]=v[i][j];swap(nx,v);}
-#define vs_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][i] = v[i][j]; swap(nx, v);}
-
-//-----------5.数学系--------------
-#define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
-#define manhattan(x1,x2,y1,y2) (abs(x1-x2)+abs(y1-y2)) // マンハッタン距離 = |x1-x2|+|y1-y2|
-
-template<class T>T tousa_sum1(T l, T d, T r) {//初項,公差,末項 で総和を求める
-    T wide = (r - l) / d + 1;
-    return (l + r) * wide / 2;
-}
-template<class T>T tousa_sum2(T a, T d, T n) {//初項,交差,項数 で総和を求める
-    return (a * 2 + d * (n - 1)) * n / 2;
-}
-ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
-    return (r - l) / d + 1;
-}
-mint touhi_sum(mint a, mint r, ll n) {//初項,公比,項数で等比数列の総和を求める
-    if (r == 1) {
-        return a * n;
-    }
-    mint bunsi = a * (r.pow(n) - mint(1));
-    mint bunbo = r - 1;
-    return bunsi / bunbo;
-}
-
-ll nc2(ll x) { return x * (x - 1) / 2; }
-ll nc3(ll x) { return x * (x - 1) * (x - 2) / 6; }
-ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
-
-//-----------6.デバックや出力系------------------
-void print(ld x) { printf("%.20Lf\n", x); }
-
-#define out(v) {cout<<v<<endl;}
-#define v_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<' ';cout<<endl;}//一次元配列を出力する
-#define vv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
-#define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
-#define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
-#define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
-
-// AI関連の関数（将来の改善用にコメントアウトして保持）
-/*
-// AIプレイヤーpのマス(i,j)に対する評価値を計算
-ld calc_eval(ll p, ll i, ll j, ll n, ll m, ll u, vvl& v, vvl& o, vvl& l, vvld& internal_setting) {
-    ld wa = internal_setting[p][0];
-    ld wb = internal_setting[p][1];
-    ld wc = internal_setting[p][2];
-    ld wd = internal_setting[p][3];
-
-    ll owner = o[i][j];
-    ll level = l[i][j];
-    ld value = v[i][j];
-
-    // 誰の領土でもない場合
-    if (owner == -1) {
-        return value * wa;
-    }
-    // 自分の領土の場合（プレイヤーpは1-indexed: p+1）
-    else if (owner == p + 1) {
-        if (level < u) {
-            return value * wb;
-        } else {
-            return 0;
-        }
-    }
-    // 他のプレイヤーの領土の場合
-    else {
-        if (level == 1) {
-            return value * wc;
-        } else {
-            return value * wd;
-        }
-    }
-}
-
-// プレイヤーpの移動可能なマスを列挙
-vc<lP> get_movable(ll px, ll py, ll n, set<lP>& occupied) {
-    vc<lP> movable;
-    vl dx = {1, 0, -1, 0};
-    vl dy = {0, 1, 0, -1};
-
-    rep(i, 4) {
-        ll nx = px + dx[i];
-        ll ny = py + dy[i];
-        if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-        if (occupied.find({nx, ny}) != occupied.end()) continue;
-        movable.pb({nx, ny});
-    }
-
-    return movable;
-}
-
-// ゲーム状態を更新する（移動後の領土とレベルの変化）
-void update_game_state(ll player_id, ll x, ll y, ll u, vvl& o, vvl& l) {
-    // player_idは0-indexed (0が自分、1以降がAI)
-    ll owner = o[x][y];
-    ll level = l[x][y];
-
-    if (owner == -1) {
-        // 誰の領土でもない場合: 自分の領土になる(レベル1)
-        o[x][y] = player_id;
-        l[x][y] = 1;
-    } else if (owner == player_id) {
-        // 自分の領土の場合: レベルをuまで上げる
-        if (level < u) {
-            l[x][y] = level + 1;
-        }
-    } else {
-        // 他のプレイヤーの領土の場合: レベルを下げる
-        if (level == 1) {
-            // レベル1なら奪い取る
-            o[x][y] = player_id;
-            l[x][y] = 1;
-        } else {
-            // レベル2以上ならレベルを1下げる
-            l[x][y] = level - 1;
-        }
-    }
-}
-
-// AIプレイヤーpの行動を決定
-lP decide_ai_move(ll p, vc<lP>& exy, ll n, ll m, ll u, vvl& v, vvl& o, vvl& l,
-                  vvld& internal_setting, set<lP>& occupied, ld r1, ld r2) {
-    ll px = exy[p + 1].first;
-    ll py = exy[p + 1].second;
-    ld eps = internal_setting[p][4];
-
-    // 移動可能なマスを取得
-    vc<lP> movable = get_movable(px, py, n, occupied);
-
-    if (movable.empty()) {
-        return {px, py}; // 移動できない場合は現在位置を返す
-    }
-
-    // ランダム行動 vs 貪欲行動の決定
-    if (r1 < eps) {
-        // ランダム行動
-        ll idx = (ll)(r2 * movable.size());
-        return movable[idx];
-    } else {
-        // 貪欲行動
-        ld max_eval = -1e18;
-        vc<lP> best_moves;
-
-        for (auto [i, j] : movable) {
-            ld eval = calc_eval(p, i, j, n, m, u, v, o, l, internal_setting);
-            if (eval > max_eval) {
-                max_eval = eval;
-                best_moves.clear();
-                best_moves.pb({i, j});
-            } else if (abs(eval - max_eval) < 1e-9) {
-                best_moves.pb({i, j});
+                // 連結性ボーナス
+                ll adjacent_own = 0;
+                rep(d, 4) {
+                    ll ni = i + dx[d];
+                    ll nj = j + dy[d];
+                    if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
+                        if (o[ni][nj] == 0) adjacent_own++;
+                    }
+                }
+                cluster_bonus += adjacent_own * v[i][j] / 2;
             }
         }
+    }
 
-        ll idx = (ll)(r2 * best_moves.size());
-        return best_moves[idx];
+    score += territory_count * 125;
+    score += max_level_count * 360;
+    score += high_value_territory * 210;
+    score += cluster_bonus;
+
+    return score;
+}
+
+void simulate_move(ll player, ll ni, ll nj, ll u, vvl& o, vvl& l) {
+    ll owner = o[ni][nj];
+    ll level = l[ni][nj];
+
+    if (owner == -1) {
+        o[ni][nj] = player;
+        l[ni][nj] = 1;
+    } else if (owner == player) {
+        if (level < u) l[ni][nj] = level + 1;
+    } else {
+        if (level == 1) {
+            o[ni][nj] = player;
+            l[ni][nj] = 1;
+        } else {
+            l[ni][nj] = level - 1;
+        }
     }
 }
-*/
 
-int main()
-{
-    ll n,m,t,u;
-    cin >> n >> m>> t>>u;
-    vvl v(n,vl(n));
-    cin>>v;
+// モンテカルロシミュレーション
+ll monte_carlo_eval(ll n, ll m, ll u, vvl& v, vvl o, vvl l, lP start_pos, vc<lP>& exy, ll depth) {
+    ll total_score = 0;
+    const ll simulations = 4;  // シミュレーション回数
+
+    rep(sim, simulations) {
+        vvl o_sim = o;
+        vvl l_sim = l;
+        lP pos = start_pos;
+
+        rep(step, depth) {
+            // ランダムに有効な移動を選択
+            vector<ll> valid_dirs;
+            rep(di, 4) {
+                ll ni = pos.first + dx[di];
+                ll nj = pos.second + dy[di];
+                if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
+                    bool occupied = false;
+                    rep(k, m) {
+                        if (k == 0) continue;
+                        if (exy[k].first == ni && exy[k].second == nj) {
+                            occupied = true;
+                            break;
+                        }
+                    }
+                    if (!occupied) valid_dirs.push_back(di);
+                }
+            }
+
+            if (valid_dirs.empty()) break;
+
+            ll di = valid_dirs[rng() % valid_dirs.size()];
+            ll ni = pos.first + dx[di];
+            ll nj = pos.second + dy[di];
+
+            simulate_move(0, ni, nj, u, o_sim, l_sim);
+            pos = {ni, nj};
+        }
+
+        total_score += calc_score(n, u, v, o_sim, l_sim);
+    }
+
+    return total_score / simulations;
+}
+
+int main() {
+    ll n, m, t, u;
+    cin >> n >> m >> t >> u;
+    vvl v(n, vl(n));
+    rep(i, n) rep(j, n) cin >> v[i][j];
+
     vc<lP> exy(m);
-    set<lP> st;
-    rep(i,m) {
-        ll row,col; cin>>row>>col;
-        exy[i] = {row,col};
-        st.insert({row,col});
+    rep(i, m) {
+        ll row, col;
+        cin >> row >> col;
+        exy[i] = {row, col};
     }
-    lP me = {exy[0].first, exy[0].second};
-    auto random_ct = mt19937(10);
 
-    vc<lP> txy(m);
-    vvl o(n,vl(n,-1));
-    vvl l(n,vl(n,0));
+    lP me = exy[0];
 
-    rep(i,m) {
-        ll x = exy[i].first;
-        ll y = exy[i].second;
-        o[x][y] = i;
-        l[x][y] = 1;
+    vvl o(n, vl(n, -1));
+    vvl l(n, vl(n, 0));
+
+    rep(i, m) {
+        o[exy[i].first][exy[i].second] = i;
+        l[exy[i].first][exy[i].second] = 1;
     }
+
     ll turn_count = 0;
+
     while(t--) {
         if (turn_count > 0) {
-            rep(i,m) {
-                ll x,y; cin>>x>>y;
-                txy[i] = {x,y};
+            vector<pair<ll,ll>> tx(m);
+            rep(i, m) {
+                cin >> tx[i].first >> tx[i].second;
             }
 
-            st.clear();
-            rep(i,m) {
-                ll x,y; cin>>x>>y;
-                exy[i] = {x,y};
-                st.insert({x,y});
+            rep(i, m) {
+                cin >> exy[i].first >> exy[i].second;
             }
-            me = {exy[0].first, exy[0].second};
+            me = exy[0];
 
-            rep(i,n) {
-                rep(j,n) {
-                    ll k; cin>>k;
-                    o[i][j] = k;
+            rep(i, n) {
+                rep(j, n) {
+                    cin >> o[i][j];
                 }
             }
 
-            rep(i,n) {
-                rep(j,n) {
-                    ll k; cin>>k;
-                    l[i][j] = k;
+            rep(i, n) {
+                rep(j, n) {
+                    cin >> l[i][j];
                 }
             }
         }
 
-       // プレイヤー0の移動を決定（他のプレイヤーの位置を避ける）
-        ll nrow, ncol;
-        while(1) {
-            ll di = random_ct()%4;
-            nrow = me.first + dx[di];
-            ncol = me.second + dy[di];
-            if (nrow < 0 || nrow >= n || ncol < 0 || ncol >= n) continue;
+        ll best_dir = -1;
+        ll best_score = -1e18;
+
+        // ビームサーチ：各方向についてモンテカルロ評価
+        rep(di, 4) {
+            ll ni = me.first + dx[di];
+            ll nj = me.second + dy[di];
+
+            if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
 
             bool occupied = false;
-            rep(i,m) {
-                if (i == 0) continue;
-                if (exy[i].first == nrow && exy[i].second == ncol) {
+            rep(k, m) {
+                if (k == 0) continue;
+                if (exy[k].first == ni && exy[k].second == nj) {
                     occupied = true;
                     break;
                 }
             }
-            if (!occupied) {
+            if (occupied) continue;
+
+            // 1手目をシミュレート
+            vvl o1 = o;
+            vvl l1 = l;
+            simulate_move(0, ni, nj, u, o1, l1);
+
+            ll score1 = calc_score(n, u, v, o1, l1);
+
+            // 敵との距離ペナルティ
+            ll enemy_penalty = 0;
+            rep(k, m) {
+                if (k == 0) continue;
+                ll dist = abs(ni - exy[k].first) + abs(nj - exy[k].second);
+                if (dist <= 2) {
+                    enemy_penalty += 5000 / (dist + 1);
+                }
+            }
+
+            // モンテカルロで深く評価（4手先まで）
+            ll mc_score = monte_carlo_eval(n, m, u, v, o1, l1, {ni, nj}, exy, 4);
+
+            // 即時スコアとモンテカルロスコアを組み合わせ
+            ll combined = score1 * 5 / 10 + mc_score * 5 / 10 - enemy_penalty;
+
+            if (combined > best_score) {
+                best_score = combined;
+                best_dir = di;
+            }
+        }
+
+        ll nrow = me.first, ncol = me.second;
+        if (best_dir != -1) {
+            nrow = me.first + dx[best_dir];
+            ncol = me.second + dy[best_dir];
+        } else {
+            rep(di, 4) {
+                ll ni = me.first + dx[di];
+                ll nj = me.second + dy[di];
+
+                if (ni < 0 || ni >= n || nj < 0 || nj >= n) continue;
+
+                bool occupied = false;
+                rep(k, m) {
+                    if (k == 0) continue;
+                    if (exy[k].first == ni && exy[k].second == nj) {
+                        occupied = true;
+                        break;
+                    }
+                }
+                if (occupied) continue;
+
+                nrow = ni;
+                ncol = nj;
                 break;
             }
         }

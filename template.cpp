@@ -64,6 +64,9 @@ void chmax(ll &a, ll b) { a = max(a, b); }
 #define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
 #define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
 
+// 文字列のrotate
+//rotate(n.begin(), n.begin()+1 ,n.end());
+
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
 #define next_p(v) next_permutation(v.begin(),v.end())
 
