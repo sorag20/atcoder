@@ -11,6 +11,7 @@
 #include <random>
 #include <algorithm>
 #define ll long long
+#define ull = unsigned long long; // 約1.84*10^19
 #define ld long double
 #define P pair<int, int>
 #define lP pair<ll, ll>
@@ -52,8 +53,8 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 #define all(x) begin(x), end(x)
 #define gall(x) begin(x), end(x), greater<>()
 
-void chmin(ll &a, ll b) { a = min(a, b); }
-void chmax(ll &a, ll b) { a = max(a, b); }
+bool chmin(ll &a, ll b) { if (a > b) { a = b; return true; } return false; }
+bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 
 #define YES cout<<"Yes"<<endl;
 #define NO cout<<"No"<<endl;

@@ -19,5 +19,3 @@ for file in a.cpp b.cpp c.cpp d.cpp e.cpp
 do
     cp -n "$TEMPLATE" ./$file
 done
-
-code .
