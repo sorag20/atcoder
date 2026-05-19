@@ -129,21 +129,46 @@ int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
-
-    ll q;
-    cin >>q;
-    pq_g<ll> que;
-    rep(_,q) {
-        ll t,h; cin>>t>>h;
-        if (t == 1) {
-            que.push(h);
-        } else {
-            while(que.size() && que.top()<=h) {
-                que.pop();
+    ll n; cin>>n;
+    vc<tuple<ll,ll,ll>> e;
+    vvl a(n, vl(n));
+    rep(i,n) {
+        for (ll j = i+1;j<n;j++) {
+           ll A; cin>>A;
+           a[i][j] = A;
+           a[j][i] = A;
+           e.pb({A, i, j});
+        }
+    }
+    sort(all(e));
+    dsu f(n);
+    vvc<lP> g(n);
+    for (auto [A, i, j]: e) {
+        if (f.same(i,j)) continue;
+        f.merge(i,j);
+        g[i].pb({A,j});
+        g[j].pb({A,i});
+    }
+    
+    bool ans = true;
+    rep(i,n) {
+        queue<lP> que;
+        vl dist(n, -1);
+        que.push({0,i});
+        while(que.size()) {
+            auto [d, v] = que.front();que.pop();
+            for (auto [A,u]:g[v]) {
+                if (dist[u] != -1) continue;
+                dist[u] = d + A;
+                que.push({dist[u], u});
             }
         }
-        out(que.size())
+        for (ll j = i+1;j<n;j++) {
+            if (dist[j] != a[i][j]) ans= false;
+        }
     }
+
+    if (ans) YN
 
     return 0;
 }

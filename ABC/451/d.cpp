@@ -129,9 +129,23 @@ int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
-
     ll n;
     cin >> n;
-
+    const ll M = 9;
+    vs bs;
+    for (ll i = 1;i<1e9;i*=2) bs.pb(to_string(i));
+    vl ans;
+    auto f = [&](auto f, string s) -> void {
+        for (auto x:bs) {
+            string ns = s+x;
+            if (ns.size()>M) break;
+            ans.pb(stoll(ns));
+            f(f, ns);
+        }
+    };
+    f(f, "");
+    sort(all(ans));
+    vc_unique(ans);
+    out(ans[n-1]);
     return 0;
 }
