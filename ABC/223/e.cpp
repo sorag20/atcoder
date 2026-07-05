@@ -11,6 +11,7 @@
 #include <random>
 #include <algorithm>
 #define ll long long
+#define ull unsigned long long // 約1.84*10^19
 #define ld long double
 #define P pair<int, int>
 #define lP pair<ll, ll>
@@ -52,8 +53,8 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 #define all(x) begin(x), end(x)
 #define gall(x) begin(x), end(x), greater<>()
 
-void chmin(ll &a, ll b) { a = min(a, b); }
-void chmax(ll &a, ll b) { a = max(a, b); }
+bool chmin(ll &a, ll b) { if (a > b) { a = b; return true; } return false; }
+bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 
 #define YES cout<<"Yes"<<endl;
 #define NO cout<<"No"<<endl;
@@ -63,6 +64,9 @@ void chmax(ll &a, ll b) { a = max(a, b); }
 // ↓必ず、直前にsort(all(v));を入れないとuniqueが正しく動作しない
 #define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
 #define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
+
+// 文字列のrotate
+//rotate(n.begin(), n.begin()+1 ,n.end());
 
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
 #define next_p(v) next_permutation(v.begin(),v.end())
@@ -120,66 +124,37 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
-// Sieve of Eratosthenes
-// https://youtu.be/UTVg7wzMWQc?t=2774
-struct Sieve {
-  ll n;
-  vector<ll> f, primes;
-  Sieve(ll n=1):n(n), f(n+1) {
-    f[0] = f[1] = -1;
-    for (ll i = 2; i <= n; ++i) {
-      if (f[i]) continue;
-      primes.push_back(i);
-      f[i] = i;
-      for (ll j = i*i; j <= n; j += i) {
-        if (!f[j]) f[j] = i;
-      }
-    }
-  }
-  // xが素数かどうかを判定する。
-  bool isPrime(ll x) { return f[x] == x;}
-
-  // 篩を用いて、xを素因数分解する。
-  // リストを返す。
-  // 計算量はO(素因数の個数)
-  vector<ll> factorList(ll x) {
-    vector<ll> res;
-    while (x != 1) {
-      res.push_back(f[x]);
-      x /= f[x];
-    }
-    return res;
-  }
-  // 篩を用いて、xを素因数分解する。
-  // ランレングス圧縮版
-  // 計算量はO(素因数の個数)
-  vector<lP> factor(ll x) {
-    vector<ll> fl = factorList(x);
-    if (fl.size() == 0) return {};
-    vector<lP> res(1, P(fl[0], 0));
-    for (ll p : fl) {
-      if (res.back().first == p) {
-        res.back().second++;
-      } else {
-        res.emplace_back(p, 1);
-      }
-    }
-    return res;
-  }
-};
 
 int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll x, y, a, b, c;
-    cin >> x >> y >> a >> b >> c;
-    Sieve sieve(1e18);
-    vector<lP> ap = sieve.factor(a);
-    vector<lP> bp = sieve.factor(b);
-    vector<lP> cp = sieve.factor(c);
+    ll x, y;cin>>x>>y;
+    ll a,b ,c; cin>>a>>b>>c;
+    auto divCeil= [&](ll a, ll b) {return (a+b-1)/b;};
+    auto f2 = [&](ll x, ll y, ll a, ll b) ->bool {
+        ll w = divCeil(a, y) + divCeil(b,y);
+        return w <= x;
+    };
 
+    auto f3 = [&](ll x, ll y, ll a, ll b, ll c) -> bool{
+        ll w = divCeil(a,y);
+        if (w >= x) return false;
+        x -= w;
+        return f2(x,y,b,c)|| f2(y,x,b,c);
+    };
 
+    rep(fi,2){
+        rep(ri,3) {
+            if (f3(x,y,a,b,c)) {
+                YES
+                return 0;
+            }
+            swap(a,b);swap(b,c);
+        }
+        swap(x,y);
+    }
+    NO
     return 0;
 }

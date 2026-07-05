@@ -20,8 +20,8 @@ using namespace atcoder;
 //-------------1.型系---------------
 //ll const INF = 2e18;
 
-//using mint = modint998244353;
-using mint = modint1000000007;
+using mint = modint998244353;
+//using mint = modint1000000007;
 //using mint = modint;
 //mint::set_mod(m); // main関数内で書く
 template<typename T> using vc = vector<T>;
@@ -126,8 +126,25 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n, d;
+    cin >> n >> d;
+    vmint f(n+1), g(n+1);
+    vmint two(n+1);
+    two[0] = 1;
+    rep(i,n) two[i+1] = two[i]*2;
+    nfor(i, 1, n+1) {
+        ll l = i-1, r = d-l;
+        mint leaf = 0;
+        if (r >= 0 && r <= i-1) {
+            leaf = two[max(l-1, (ll)0)]*two[max(r-1, (ll)0)];
+            if (l != r) leaf *= 2;
+        }
+        g[i] = g[i-1] + leaf;
+    }
+    nfor(i, 1, n+1) {
+        f[i] = f[i-1]*2 + g[i];
+    }
+    cout << (f[n]*2).val() << endl;
 
     return 0;
 }

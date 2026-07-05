@@ -20,6 +20,8 @@ using namespace atcoder;
 void chmin(ll &a, ll b) { a = min(a, b); }
 void chmax(ll &a, ll b) { a = max(a, b); }
 
+// ワーシャルフロイド
+
 int main()
 {
     //freopen("input.txt", "r", stdin);

@@ -1,25 +1,22 @@
-struct edge{
-    ll to;
-    ll len;
-};
+ll const INF = 1e18;
+vector<ll> dist(n, INF);
+priority_queue<lP, vector<lP>, greater<lP>> que;
 
-const ll INF=2e15;
-vector<ll> dist(n,INF);
-dist[0]=0;
-vector<bool> done(n,false);
-priority_queue<lP,vector<lP>,greater<lP>> que;
-que.emplace(dist[0],0);
-while(que.size()>0){
-    auto [d,v]=que.top();
-    que.pop();
-    if(done[v]) continue;
-        done[v]=true;
-    for(auto c:g[v]){
-        if(dist[c.to]>dist[v]+c.len){
-            dist[c.to]=dist[v]+c.len;
-            que.emplace(dist[c.to],c.to);
-        }
+que.push({0, 0});
+dist[0] = 0;
+
+while(!que.empty()) {
+    auto [d, to] = que.top();que.pop();
+    if (dist[to] != d) continue;
+    for (auto[b, c]: g[to]) {
+        ll nd = d + c;
+        if (dist[b] <= nd) continue;
+        dist[b] = nd;
+        que.push({nd, b});
     }
 }
-for(auto c:dist) cout<<c<<endl;
 
+for (int i = 1;i < n;i++){
+    cout << dist[i] << " ";
+}
+cout << endl;

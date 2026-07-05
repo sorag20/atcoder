@@ -11,7 +11,7 @@
 #include <random>
 #include <algorithm>
 #define ll long long
-#define ull = unsigned long long; // 約1.84*10^19
+#define ull unsigned long long // 約1.84*10^19
 #define ld long double
 #define P pair<int, int>
 #define lP pair<ll, ll>
@@ -33,7 +33,7 @@ template<class T> using pq_g = priority_queue<T, vc<T>, greater<T>>;//小さい�
 //-------------2.配列系--------------
 using vl = vc<ll>; using vvl = vvc<ll>; using vvvl = vvc<vl>; using vvvvl = vvc<vvl>;
 using vs = vc<string>; using vvs = vvc<string>;
-using vb = vc<bool>; using vvb = vvc<bool>; using vvvb = vvc<bool>;
+using vb = vc<bool>; using vvb = vvc<bool>; using vvvb = vvc<vb>;
 using vld = vc<ld>; using vvld = vvc<ld>; using vvvld = vvc<vld>;
 using vmint = vc<mint>; using vvmint = vvc<mint>; using vvvmint = vvc<vmint>;
 #define rep(i,x) for(ll i=0;i<x;i++)
@@ -69,6 +69,7 @@ bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 //rotate(n.begin(), n.begin()+1 ,n.end());
 
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
+#define parity(s) (__builtin_parity(s)) // 1のビット数が奇数個ならTrue, 偶数個ならFalseを返す。
 #define next_p(v) next_permutation(v.begin(),v.end())
 
 //---------4.グリッド系----------
@@ -92,11 +93,11 @@ bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
 #define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
 #define manhattan(x1,x2,y1,y2) (abs(x1-x2)+abs(y1-y2)) // マンハッタン距離 = |x1-x2|+|y1-y2|
 
-template<class T>T tousa_sum1(T l, T d, T r) {//初項,公差,末項 で総和を求める
-    T wide = (r - l) / d + 1;
+ll tousa_sum1(ll l, ll d, ll r) {//初項,公差,末項 で総和を求める
+    ll wide = (r - l) / d + 1;
     return (l + r) * wide / 2;
 }
-template<class T>T tousa_sum2(T a, T d, T n) {//初項,交差,項数 で総和を求める
+ll tousa_sum2(ll a, ll d, ll n) {//初項,交差,項数 で総和を求める
     return (a * 2 + d * (n - 1)) * n / 2;
 }
 ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
