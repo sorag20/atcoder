@@ -7,7 +7,7 @@ if [ $# != 2 ]; then
     echo 第二引数:ファイル名
     exit 0
 fi
-FOLDER="/Users/sorag/Documents/AtCoder/ARC/$1"
+FOLDER="/Users/sorag/dev/AtCoder/ARC/$1"
 FILE=${2%.*}.cpp
 mkdir -p $FOLDER
 cd $FOLDER

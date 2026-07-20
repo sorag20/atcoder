@@ -128,7 +128,7 @@ int main()
     while(t--) {
         ll h,w; cin>>h>>w;
         vs s(h); cin>>s;
-        ll ans = 9;
+        ll ans = 13;
 
         auto f = [&](auto f, ll cnt) {
             if (cnt >= ans) return;

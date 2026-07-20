@@ -134,28 +134,37 @@ int main()
     ll n,p;
     cin >> n >>p;
     mint::set_mod(p);
-    vvvmint dp(n+1,vvmint(26,vmint(26)));
-    rep(j,26) {
-        rep(k,26) {
-            if (j == k) dp[0][j][k] = 1;
+    vvmint dp(n+1,vmint(n+1));
+    vvmint ds(n+1,vmint(n+1));
+    auto f = [&](ll x) ->ll {
+        ll res = 0;
+        while(x> 0) {
+            x/= 10;
+            res++;
         }
+        return res + 1;
+    };
+    nfor(i,1,n+1) {
+        dp[i][f(i)] = 26;
     }
-    rep(i,n){
-        rep(j,26) {
-            rep(k,26) {
-                if (j != k) continue;
-                dp[i+1][j] += dp[i][k];
+
+    const ll ten[] = {0,1,10,100,1000,10000};
+    nfor(i,1,n+1){
+        rep(j,n) {
+            nfor(k,1,5) {
+                ll nj = j - k - 1;
+                if (nj < 0) continue;
+                ll lb = ten[k], ub = ten[k+1];
+                ub = min(ub, i);
+                if (lb >= ub) continue;
+                dp[i][j] += (ds[i-lb][nj] - ds[i-ub][nj])*25;
             }
+            ds[i][j] += ds[i-1][j] + dp[i][j];
         }
     }
-    rep(i,n+1){
-        rep(j,26) {
-            cout << dp[i][j].val()<< " ";
-        }
-        cout << endl;
-    }
+
     mint ans;
-    rep(i,26) ans += dp[n][i];
+    rep(i,n) ans += dp[n][i];
     out(ans.val())
     return 0;
 }

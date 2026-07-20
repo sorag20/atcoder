@@ -1,0 +1,258 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+#include <set>
+#include <unordered_set>
+#include <queue>
+#include <stack>
+#include <utility>
+#include <map>
+#include <regex>
+#include <math.h>
+#include <random>
+#include <algorithm>
+#define ll long long
+#define ull unsigned long long // 約1.84*10^19
+#define ld long double
+#define P pair<int, int>
+#define lP pair<ll, ll>
+#define ldP pair<ld, ld>
+using namespace std;
+using namespace atcoder;
+//-------------1.型系---------------
+//ll const INF = 2e18;
+
+using mint = modint998244353;
+//using mint = modint1000000007;
+//using mint = modint;
+//mint::set_mod(m); // main関数内で書く
+template<typename T> using vc = vector<T>;
+template<typename T> using vvc = vc<vc<T>>;
+template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
+template<class T> using pq_g = priority_queue<T, vc<T>, greater<T>>;//小さい順
+
+//-------------2.配列系--------------
+using vl = vc<ll>; using vvl = vvc<ll>; using vvvl = vvc<vl>; using vvvvl = vvc<vvl>;
+using vs = vc<string>; using vvs = vvc<string>;
+using vb = vc<bool>; using vvb = vvc<bool>; using vvvb = vvc<vb>;
+using vld = vc<ld>; using vvld = vvc<ld>; using vvvld = vvc<vld>;
+using vmint = vc<mint>; using vvmint = vvc<mint>; using vvvmint = vvc<vmint>;
+#define rep(i,x) for(ll i=0;i<x;i++)
+template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))i >> v[j]; return i; }
+
+//--------3.コード短縮化---------
+#define pb push_back
+#define eb emplace_back
+#define em emplace
+#define pob pop_back
+
+#define rrep(i,x) for(ll i=1;i<=x;i++)
+#define drep(i,x) for(ll i=(x)-1;i>=0;i--)
+#define nfor(i,s,n) for(ll i=s;i<n;i++)//i=s,s+1...n-1 ノーマルfor
+#define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
+
+#define all(x) begin(x), end(x)
+#define gall(x) begin(x), end(x), greater<>()
+
+bool chmin(ll &a, ll b) { if (a > b) { a = b; return true; } return false; }
+bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
+
+#define YES cout<<"Yes"<<endl;
+#define NO cout<<"No"<<endl;
+#define YN {cout<<"Yes"<<endl;}else{cout<<"No"<<endl;}// if(a==b)YN;
+#define dame cout<<-1<<endl;
+
+// ↓必ず、直前にsort(all(v));を入れないとuniqueが正しく動作しない
+#define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
+#define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
+
+// 文字列のrotate
+//rotate(n.begin(), n.begin()+1 ,n.end());
+
+#define pop_cnt(s) ((ll)__builtin_popcountll(s))
+#define parity(s) (__builtin_parity(s)) // 1のビット数が奇数個ならTrue, 偶数個ならFalseを返す。
+#define next_p(v) next_permutation(v.begin(),v.end())
+
+//---------4.グリッド系----------
+//vl dx = { 1,0,-1,0 };//vl dx={1,1,0,-1,-1,-1,0,1};
+//vl dy = { 0,1,0,-1 };//vl dy={0,1,1,1,0,-1,-1,-1};
+
+bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
+    return (!(0 <= i && i < h && 0 <= j && j < w));
+}
+
+#define vvl_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//時計回りに90°回転
+#define vvl_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//反時計周りに90°回転
+
+#define vs_rotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][h-i-1]=v[i][j];swap(nx,v);}//文字列版 時計回りに90°回転
+#define vs_rrotate(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[w-j-1][i]=v[i][j];swap(nx,v);}//文字列版　反時計周りに90°回転
+
+#define vvl_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vvl nx(w,vl(h));rep(i,h)rep(j,w)nx[j][i]=v[i][j];swap(nx,v);}
+#define vs_tenti(v) {ll h = size(v);ll w = (h>0)?size(v[0]):0;vs nx(w,string(h,'.'));rep(i,h)rep(j,w)nx[j][i] = v[i][j]; swap(nx, v);}
+
+//-----------5.数学系--------------
+#define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
+#define manhattan(x1,x2,y1,y2) (abs(x1-x2)+abs(y1-y2)) // マンハッタン距離 = |x1-x2|+|y1-y2|
+ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
+
+ll tousa_sum1(ll l, ll d, ll r) {//初項,公差,末項 で総和を求める
+    ll wide = (r - l) / d + 1;
+    return (l + r) * wide / 2;
+}
+ll tousa_sum2(ll a, ll d, ll n) {//初項,交差,項数 で総和を求める
+    return (a * 2 + d * (n - 1)) * n / 2;
+}
+ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
+    return (r - l) / d + 1;
+}
+ll touhi_sum(ll a, ll r, ll n) {//初項,公比,項数で等比数列の総和を求める
+    if (r == 1) {
+        return a * n;
+    }
+    ll bunsi = a * (pw(r, n) - 1LL);
+    ll bunbo = r - 1;
+    return bunsi / bunbo;
+}
+
+ll nc2(ll x) { return x * (x - 1) / 2; }
+ll nc3(ll x) { return x * (x - 1) * (x - 2) / 6; }
+
+// C++の三角関数の引数はradian
+ld radian(ld deg) { return deg * (numbers::pi / 180.0); }
+ld degree(ld rad) { return rad*(180.0/numbers::pi); }
+
+//-----------6.デバックや出力系------------------
+void print(ld x) { printf("%.20Lf\n", x); }
+
+#define out(v) {cout<<v<<endl;}
+#define v_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<' ';cout<<endl;}//一次元配列を出力する
+#define vv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
+#define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
+#define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
+#define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
+ll n;
+vvc<lP> g; // g[v] = {(to, edge_id), ...}
+vl par;    // par[v]   = vの親頂点(rootは-1)
+vl depth;  // depth[v] = 根からの深さ
+vl sz;     // sz[v]    = vを根とする部分木のサイズ
+vl heavy;  // heavy[v] = vの重い子(部分木サイズ最大の子、無ければ-1)
+vl head;   // head[v]  = vが属するHLDチェインの先頭頂点
+vl in;     // in[v]    = vのHLD上の並び順(Fenwick Treeのindex)
+vl rev_in; // rev_in[in[v]] = v (inの逆引き。レベル祖先クエリで使う)
+vl edge_child; // edge_child[i] = 辺i(0-indexed)の子側の頂点
+
+void hld_build(int root) {
+    par.assign(n, -1); depth.assign(n, 0); sz.assign(n, 1); heavy.assign(n, -1);
+    edge_child.assign(n - 1, -1);
+
+    vector<ll> order; order.reserve(n);
+    vector<char> visited(n, 0);
+    queue<ll> q; q.push(root); visited[root] = 1;
+    while (!q.empty()) {
+        ll v = q.front(); q.pop();
+        order.pb(v);
+        for (auto [to, id] : g[v]) {
+            if (!visited[to]) {
+                visited[to] = 1;
+                par[to] = v;
+                depth[to] = depth[v] + 1;
+                edge_child[id] = to;
+                q.push(to);
+            }
+        }
+    }
+    drep(i, (ll)order.size()) {
+        ll v = order[i];
+        ll maxsz = -1;
+        for (auto [to, id] : g[v]) {
+            if (to == par[v]) continue;
+            sz[v] += sz[to];
+            if (sz[to] > maxsz) { maxsz = sz[to]; heavy[v] = to; }
+        }
+    }
+
+    head.assign(n, -1); in.assign(n, -1); rev_in.assign(n, -1);
+    int timer = 0;
+    vector<lP> st; st.pb({root, root}); // (v, head)
+    while (!st.empty()) {
+        auto [v, h] = st.back(); st.pob();
+        head[v] = h;
+        in[v] = timer;
+        rev_in[timer] = v;
+        timer++;
+        if (heavy[v] != -1) {
+            for (auto [to, id] : g[v]) {
+                if (to == par[v] || to == heavy[v]) continue;
+                st.pb({to, to});
+            }
+            st.pb({heavy[v], h});
+        }
+    }
+}
+
+
+ll hld_lca(ll u, ll v) {
+    while (head[u] != head[v]) {
+        if (depth[head[u]] < depth[head[v]]) swap(u, v);
+        u = par[head[u]];
+    }
+    return depth[u] < depth[v] ? u : v; // 深さが浅い方がLCA
+}
+
+// vからk個上の祖先を返す(レベル祖先クエリ)。存在しなければ-1
+ll hld_la(ll v, ll k) {
+    ll target_depth = depth[v] - k;
+    if (target_depth < 0) return -1;
+    while (depth[head[v]] > target_depth) {
+        v = par[head[v]];
+    }
+    return rev_in[in[v] - (depth[v] - target_depth)];
+}
+
+// パスs-tにおけるi番目(0-indexed, sが0番目)の頂点を返す。存在しなければ-1
+ll hld_jump(ll s, ll t, ll i) {
+    ll l = hld_lca(s, t);
+    ll d1 = depth[s] - depth[l]; // sからlcaまでの距離
+    ll d2 = depth[t] - depth[l]; // lcaからtまでの距離
+    if (i < 0 || i > d1 + d2) return -1;
+    if (i <= d1) return hld_la(s, i);
+    return hld_la(t, d1 + d2 - i);
+}
+
+fenwick_tree<ll> fw(0);
+
+ll hld_dist(int u, int v) {
+    ll res = 0;
+    while (head[u] != head[v]) {
+        if (depth[head[u]] < depth[head[v]]) swap(u, v);
+        res += fw.sum(in[head[u]], in[u] + 1);
+        u = par[head[u]];
+    }
+    if (depth[u] > depth[v]) swap(u, v); // u : 浅い方(LCA)
+    res += fw.sum(in[u] + 1, in[v] + 1); // uの上向き辺は含めない
+    return res;
+}
+int main()
+{
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+
+    ll q;
+    cin >> n >> q;
+    g.assign(n, {});
+    rep(i,n-1) {
+        ll u, v;
+        cin >> u >> v;
+        g[u].pb({v, i});
+        g[v].pb({u, i});
+    }
+
+    hld_build(0);
+    rep(qi,q) {
+        ll s,t,i; cin>>s>>t>>i;
+        ll ans = hld_jump(s,t,i);
+        if (ans == -1) dame
+        else out(ans)
+    }
+
+    return 0;
+}

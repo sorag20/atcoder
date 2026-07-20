@@ -125,7 +125,7 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
-
+// 円環DP
 int main()
 {
     //freopen("input.txt", "r", stdin);
@@ -133,6 +133,25 @@ int main()
 
     ll n;
     cin >> n;
+    vl a(n); cin>>a;
+    const ll INF = 1e18;
+
+    ll ans = INF;
+    
+    rep(si,2) {
+        vvl dp(n+1,vl(2,INF));
+        dp[0][si] = 0;
+        rep(i,n) {
+            rep(pj,2) {
+                rep(j,2) {
+                    if (!pj&&!j) continue;
+                    chmin(dp[i+1][j], dp[i][pj]+a[i]*j);
+                }
+            }
+        }
+        chmin(ans, dp[n][si]);
+    }
+    out(ans)
 
     return 0;
 }

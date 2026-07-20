@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -i '' '1s/.*/#include <vector>\\\\n#include <functional>\\\\n#include <random>\\\\n#include <iostream>/' test_ndps.cpp)",
+      "Bash(g++ -std=c++17 -O2 -o test_ndps test_ndps.cpp)",
+      "Bash(./test_ndps)",
+      "Bash(rm -f /private/tmp/claude-501/-Users-sorag-dev-atcoder/62c15a6c-e726-4d9f-9ec9-2b36c5c601b0/scratchpad/test_ndps.cpp /private/tmp/claude-501/-Users-sorag-dev-atcoder/62c15a6c-e726-4d9f-9ec9-2b36c5c601b0/scratchpad/test_ndps)",
+      "Bash(/opt/homebrew/bin/g++-15 -std=gnu++23 -Wall -Wextra -O2 -g -I/Users/sorag/dev/atcoder/ac-library -isystem /Users/sorag/dev/atcoder/bits -Wno-cpp -o /tmp/g_test ABC/465/g.cpp)",
+      "Bash(/tmp/g_test)"
+    ]
+  }
+}

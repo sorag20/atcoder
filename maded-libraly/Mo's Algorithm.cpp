@@ -10,7 +10,7 @@ sort(qis.begin(),qis.end(),[&](int i, int j) {
     return l[i] < l[j];
 });
 
-vector<int> ans(q);
+vector<ll> ans(q);
 int nl = 0, nr = -1;
 // unordered_mapにしないと、TLEになった。
 unordered_map<ll,ll> mp;

@@ -46,7 +46,7 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 #define pob pop_back
 
 #define rrep(i,x) for(ll i=1;i<=x;i++)
-#define drep(i,x) for(ll i=x-1;i>=0;i--)
+#define drep(i,x) for(ll i=(x)-1;i>=0;i--)
 #define nfor(i,s,n) for(ll i=s;i<n;i++)//i=s,s+1...n-1 ノーマルfor
 #define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
 
@@ -92,6 +92,7 @@ bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
 //-----------5.数学系--------------
 #define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
 #define manhattan(x1,x2,y1,y2) (abs(x1-x2)+abs(y1-y2)) // マンハッタン距離 = |x1-x2|+|y1-y2|
+ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
 
 ll tousa_sum1(ll l, ll d, ll r) {//初項,公差,末項 で総和を求める
     ll wide = (r - l) / d + 1;
@@ -103,18 +104,21 @@ ll tousa_sum2(ll a, ll d, ll n) {//初項,交差,項数 で総和を求める
 ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
     return (r - l) / d + 1;
 }
-mint touhi_sum(mint a, mint r, ll n) {//初項,公比,項数で等比数列の総和を求める
+ll touhi_sum(ll a, ll r, ll n) {//初項,公比,項数で等比数列の総和を求める
     if (r == 1) {
         return a * n;
     }
-    mint bunsi = a * (r.pow(n) - mint(1));
-    mint bunbo = r - 1;
+    ll bunsi = a * (pw(r, n) - 1LL);
+    ll bunbo = r - 1;
     return bunsi / bunbo;
 }
 
 ll nc2(ll x) { return x * (x - 1) / 2; }
 ll nc3(ll x) { return x * (x - 1) * (x - 2) / 6; }
-ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
+
+// C++の三角関数の引数はradian
+ld radian(ld deg) { return deg * (numbers::pi / 180.0); }
+ld degree(ld rad) { return rad*(180.0/numbers::pi); }
 
 //-----------6.デバックや出力系------------------
 void print(ld x) { printf("%.20Lf\n", x); }

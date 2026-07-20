@@ -29,33 +29,16 @@ int main()
     s--; t--;
     ll n;
     cin >> n;
-    vector<vector<ll>> y_x_for_r(h), y_x_for_l(h);
-    vector<vector<ll>> x_y_for_u(w), x_y_for_d(w);
+    unordered_map<ll, set<ll>> xy, yx;
+    unordered_map<ll, set<ll, std::greater<ll>>> xy_g, yx_g;
     rep(i,n) {
-        ll y, x;
-        cin >> y >> x;
-        x--; y--;
-        y_x_for_r[y].pb(x);
-        y_x_for_l[y].pb(-x);
-        x_y_for_d[x].pb(y);
-        x_y_for_u[x].pb(-y);
+        ll r,c; cin>>r>>c;
+        r--;c--;
+        xy[r].insert(c);
+        yx[c].insert(r);
+        xy_g[r].insert(c);
+        yx_g[c].insert(r);
     }
-
-    for (auto &v : y_x_for_r) sort(all(v));
-    for (auto &v : y_x_for_l) sort(all(v));
-    for (auto &v : x_y_for_u) sort(all(v));
-    for (auto &v : x_y_for_d) sort(all(v));
-
-    auto func = [](vector<ll> &v, ll i, ll j, ll l, bool is_reverse, ll r) -> ll {
-        auto it = lower_bound(all(v), j);
-        if (it == v.end()) {
-            if (is_reverse) return max(-j - l, r + 1);
-            return min(j + l, r - 1);
-        }
-        ll pos = *it;
-        if (is_reverse) return max(-j - l, -pos + 1);
-        return min(j + l, pos - 1);
-    };
 
     ll q;
     cin >> q;
@@ -63,29 +46,33 @@ int main()
         char c;
         ll l;
         cin >> c >> l;
-        if (c == 'U') {
-            if (x_y_for_u[t].empty()) {
-                s = max(s - l, 0LL);
+        if (c == 'D') {
+            auto it = yx[t].lower_bound(s);
+            if (it != yx[t].end()) {
+                s = min(*it-1, s+l);
             } else {
-                s = func(x_y_for_u[t], t, -s, l, true, -1);
+                s = min(s+l,h-1);
             }
-        } else if (c == 'D') {
-            if (x_y_for_d[t].empty()) {
-                s = min(s + l, h - 1);
+        } else if (c == 'U') {
+            auto it = yx_g[t].lower_bound(s);
+            if (it != yx_g[t].end()) {
+                s = max(*it+1, s-l);
             } else {
-                s = func(x_y_for_d[t], t, s, l, false, h);
+                s = max(s-l,0LL);
             }
         } else if (c == 'L') {
-            if (y_x_for_l[s].empty()) {
-                t = max(t - l, 0LL);
+            auto it = xy_g[s].lower_bound(t);
+            if (it != xy_g[s].end()) {
+                t = max(t-l, *it+1);
             } else {
-                t = func(y_x_for_l[s], s, -t, l, true, -1);
+                t = max(0LL,t-l);
             }
         } else if (c == 'R') {
-            if (y_x_for_r[s].empty()) {
-                t = min(t + l, w - 1);
+            auto it = xy[s].lower_bound(t);
+            if (it != xy[s].end()) {
+                t = min(*it-1, t+l);
             } else {
-                t = func(y_x_for_r[s], s, t, l, false, w);
+                t = min(t+l, w-1);
             }
         }
         cout << s + 1 << " " << t + 1 << endl;

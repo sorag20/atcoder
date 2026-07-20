@@ -127,8 +127,8 @@ int main()
 
     ll a, b, c,d;
     cin >> a >>b>>c>>d;
-    ll const BAF = 1e9;
-    a+= BAF;b += BAF; c+= BAF;d+= BAF;
+    ll const BAFF = 1e9;
+    a+= BAFF;b += BAFF; c+= BAFF;d+= BAFF;
     auto f = [&](ll j, ll i) ->ll {
         ll rj = j%4, ri = i%2;
         j-=rj, i-=ri;

@@ -1,11 +1,9 @@
-vector<vector<int>> g(n);
-queue<int> que;
-vector<int> dist(n);
-rep(i,n) dist[i]=-1;
+queue<ll> que;
+vl dist(n,-1);
 dist[0]=0;
 que.push(0);
 while(!que.empty()){
-    int v=que.front();
+    ll v=que.front();
     que.pop();
     for(auto c:g[v]){
       if(dist[c]==-1) {
