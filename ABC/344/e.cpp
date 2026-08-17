@@ -133,45 +133,48 @@ int main()
     ll n;
     cin >> n;
     vl a(n); cin>>a;
+    map<ll,ll> to, from;
+    rep(i,n-1) {
+        to[a[i+1]] = a[i];
+        from[a[i]] = a[i+1];
+    }
     ll q; cin>>q;
-    vc<tuple<ll,ll,ll>> query;
-    rep(i,q) {
-        ll t;cin>>t;
+    ll back = a.back();
+    rep(qi,q) {
+        ll t; cin>>t;
         if (t == 1) {
-            ll x, y; cin>>x>>y;
-            query.eb(t,x,y);
+            ll x,y; cin>>x>>y;
+            if (x == back) {
+                back = y;
+            }
+            ll f = from[x];
+            from[x] = y;
+            to[f] = y;
+            to[y] = x;
+            from[y] = f;
         } else {
             ll x; cin>>x;
-            query.eb(t,x,-1);
+            if (x == back) {
+                back = to[x];
+            }
+            ll f = from[x], t = to[x];
+            if (f == 0) from[t] = 0;
+            else if (t == 0) to[f] = 0;
+            else {
+                to[f] = t;
+                from[t] = f;
+            }
         }
     }
-    set<ll> st;
-    map<ll, vl> mp;
-
-    drep(i,q) {
-        auto[t, x, y] = query[i];
-        if (t == 1) {
-            if (st.find(y) != st.end()) continue;
-            out(y)
-            mp[x].pb(y);
-        } else {
-            st.insert(x);
-        }
+    vl ans;
+    while(1) {
+        ans.pb(back);
+        if (!to.count(back) || to[back] == 0)break;
+        back = to[back];
     }
-    rep(i,n) {
-        if (st.find(a[i]) == st.end()) {
-            cout << a[i]<< " ";
-        }
-        for (auto x:mp[a[i]]) {
-            cout << x << " ";
-        }
-        if (mp[mp[a[i]].end()].count()) {
-            for (auto x:mp[a[i]]) {
-                cout << x << " ";
-            }  
-        }
-    }
-    cout << endl;
+    reverse(all(ans));
+    v_cout(ans)
+    
  
     return 0;
 }

@@ -129,14 +129,66 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
-
+struct frac {
+  ll a, b;
+  frac(ll _a=0, ll _b=1): a(_a), b(_b) {
+    if (b == 0) { a = 1; return;}
+    if (b < 0) a = -a, b = -b;
+    ll g = gcd(abs(a),abs(b));
+    a /= g; b /= g;
+  }
+  bool operator<(const frac& x) const {
+    return a*x.b < x.a*b;
+  }
+  bool operator==(const frac& x) const {
+    return a == x.a && b == x.b;
+  }
+};
 int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n,m,k;
+    cin >> n >>m>>k;
+    vc<ld> a(n), b(n), c(m), d(m);
+    rep(i,n) {
+        cin>>a[i]>>b[i];
+    }
+    rep(i,m) {
+        cin>>c[i]>>d[i];
+    }
+
+    auto f = [&](ld x) ->ll{
+        vc<ld> s, t;
+        rep(i,n) {
+            s.pb(a[i]-(a[i]+ b[i])*x);
+        }
+        rep(i,m) {
+            t.pb(-c[i]+(c[i]+ d[i])*x);
+        }
+        sort(all(s));
+        sort(all(t));
+        ll res = 0;
+        ll j = 0;
+        rep(i,n) {
+            while(j < m && s[i] >= t[j]) {
+                j++;
+            }
+            res += j;
+        }
+
+        return res;
+    };
+
+    ld ok = 0, wa = 1;
+
+    rep(_,80) {
+        ld mid = (ok+wa)/2;
+        if (f(mid) >= k) ok = mid;
+        else wa = mid;
+    }
+    printf("%.10Lf\n", ok*100);
 
     return 0;
 }

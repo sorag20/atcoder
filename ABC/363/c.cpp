@@ -36,7 +36,7 @@ int main()
                 if (s[i+j] != s[i+k-j-1]) {
                     break;
                 }
-                // k文字の部分文字列が回文である
+                // k文字の部分文字列がである
                 if (j == k-1) {
                     flag = true;
                 }   

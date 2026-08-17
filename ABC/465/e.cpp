@@ -142,7 +142,7 @@ int main()
         rep(j,2)rep(k,3)rep(l,1<<10)rep(d,10) {
             ll nj = j, nk = (k*10+d)%3, nl = l|1<<d;
             if (j == 0 && lc < d) continue;
-            if (lc > d) nj = 1;
+            if (j == 0 && lc > d) nj = 1;
             if (l == 0 && d == 0) nl = 0;
             dp[nj][nk][nl]+= old[j][k][l];
         }

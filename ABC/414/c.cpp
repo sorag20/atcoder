@@ -19,7 +19,7 @@ using namespace std;
 using namespace atcoder;
 void chmin(ll &a, ll b) { a = min(a, b); }
 void chmax(ll &a, ll b) { a = max(a, b); }
-// 回文
+// 
 
 auto isPalindrome(string s, ll a) -> bool {
     ll x = stoll(s);

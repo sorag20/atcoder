@@ -126,7 +126,8 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
     ll const INF = 1e18;
-    auto f = [&](ll a, ll b, ll c, ll d) {
+    // t.r + dt.r*s == a.r + da.r*s 「2つの等差数列（公差 dt.r, da.r）がいつ同じ値になるか」
+    auto f = [&](ll a, ll b, ll c, ll d)->ll {
         if (a == c) return (b==d) ? INF:-1;
         a-=c;d-=b;
         if (a<0) a*=-1, d*=-1;
@@ -182,8 +183,10 @@ int main()
                 }
             }
         }
-        t.r += dt.r*w;t.c += dt.c*w;
-        a.r += da.r*w;a.c += da.c*w;
+        t.r += dt.r*w;
+        t.c += dt.c*w;
+        a.r += da.r*w;
+        a.c += da.c*w;
         if (nxt == pt[ti].second)ti++;
         if (nxt == pa[ai].second) ai++;
         now =nxt;

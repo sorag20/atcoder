@@ -23,7 +23,7 @@ void chmin(ll &a, ll b) { a = min(a, b); }
 void chmax(ll &a, ll b) { a = max(a, b); }
 const int dx[] = {1, 0, -1, 0};
 const int dy[] = {0, 1, 0, -1};
-
+//z algorithm
 int main()
 {
     //freopen("input.txt", "r", stdin);

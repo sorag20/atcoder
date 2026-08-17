@@ -12,6 +12,8 @@
 #include <algorithm>
 #define ll long long
 #define ull unsigned long long // 約1.84*10^19
+#define lll __int128_t // 約-1.7*10^38 ~ 1.7*10^38
+#define ulll __uint128_t // 約0 ~ 3.4*10^38
 #define ld long double
 #define P pair<int, int>
 #define lP pair<ll, ll>
@@ -47,8 +49,8 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 
 #define rrep(i,x) for(ll i=1;i<=x;i++)
 #define drep(i,x) for(ll i=(x)-1;i>=0;i--)
-#define nfor(i,s,n) for(ll i=s;i<n;i++)//i=s,s+1...n-1 ノーマルfor
-#define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
+#define nfor(i,s,n) for(ll i=s;i<=n;i++)//i=s,s+1...n ノーマルfor
+#define dfor(i,s,n) for(ll i = s; i>=n;i--)//sスタートでnまで落ちる
 
 #define all(x) begin(x), end(x)
 #define gall(x) begin(x), end(x), greater<>()
@@ -70,7 +72,6 @@ bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
 #define parity(s) (__builtin_parity(s)) // 1のビット数が奇数個ならTrue, 偶数個ならFalseを返す。
-#define next_p(v) next_permutation(v.begin(),v.end())
 
 //---------4.グリッド系----------
 //vl dx = { 1,0,-1,0 };//vl dx={1,1,0,-1,-1,-1,0,1};
@@ -123,10 +124,25 @@ ld degree(ld rad) { return rad*(180.0/numbers::pi); }
 //-----------6.デバックや出力系------------------
 void print(ld x) { printf("%.20Lf\n", x); }
 
+ostream& operator<<(ostream& os, __uint128_t v) {
+    if (v == 0) return os << '0';
+    string s;
+    while (v > 0) { s += char('0' + (int)(v % 10)); v /= 10; }
+    reverse(s.begin(), s.end());
+    return os << s;
+}
+ostream& operator<<(ostream& os, __int128_t v) {
+    if (v < 0) { os << '-'; return os << (__uint128_t)(-v); }
+    return os << (__uint128_t)v;
+}
+
 #define out(v) {cout<<v<<endl;}
 #define v_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<' ';cout<<endl;}//一次元配列を出力する
 #define vv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
+#define vs_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<endl;cout<<endl;}
+#define vvs_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<endl;}cout<<endl;}}
+#define vvvs_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<endl;}cout<<endl;}}}
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
 

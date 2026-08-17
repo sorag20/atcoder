@@ -130,8 +130,56 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n,m;
+    cin >> n >> m;
+    vl x(m), y(m), z(m);
+    vvc<lP> g(n);
+    rep(i,m) {
+        cin>>x[i]>>y[i]>>z[i];
+        x[i]--; y[i]--;
+        g[x[i]].eb(y[i],z[i]);
+        g[y[i]].eb(x[i],z[i]);
+    }
+    vl ans(n, 0);
+
+
+    bool ok = true;
+    rep(k,31) {
+        vl col(n,-1);
+        rep(i,n) {
+            vvl vs(2);
+            auto dfs = [&](auto dfs, ll v,ll now, ll p  = -1)-> void {
+                col[v] = now;
+                vs[now].pb(v);
+                for (auto [u,d]:g[v]) {
+                    if (u == p) continue;
+                    ll nd = now^(d>>k&1);
+                    if (col[u] != -1) {
+                        if (nd != col[u]) {
+                            ok = false;
+                        }
+                        continue;
+                    } 
+                    dfs(dfs, u,nd,v);
+                }
+                return;
+            };
+            if (col[i] == -1) {
+                dfs(dfs, i,0);
+                if (vs[0].size() < vs[1].size()) swap(vs[0], vs[1]);
+                for (auto v:vs[1]) {
+                    ans[v] += 1<<k;
+                }
+            }
+        }
+
+    }
+    if (!ok) {
+        dame
+        return 0;
+    }
+
+    v_cout(ans)
 
     return 0;
 }

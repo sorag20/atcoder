@@ -1,4 +1,12 @@
 // 区間加算　区間和取得
+/* この場合、初期化は、
+vl a(n);
+cin >> a;
+vector<S> init(n);
+rep(i, n) init[i] = {a[i], 1};
+lazy_segtree<S, op, e, F, mapping, composition, id> seg(init);
+の様にする。
+*/
 struct S {
     ll sum;  // 区間の総和
     ll size; // 区間の長さ

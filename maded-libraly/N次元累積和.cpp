@@ -1,36 +1,35 @@
-template<class T>
+template<class T, int DIM>
 struct NDPrefixSum {
-    int dim;
-    vector<int> sz;
-    vector<int> stride;
+    array<ll, DIM> sz{};
+    array<ll, DIM> stride{};
     vector<T> dat;
 
-    NDPrefixSum(const vector<int>& s) : dim((int)s.size()), sz(s), stride(dim) {
-        int tot = 1;
-        for (int i = dim - 1; i >= 0; i--) {
+    NDPrefixSum(const array<ll, DIM>& s) : sz(s) {
+        ll tot = 1;
+        for (ll i = DIM - 1; i >= 0; i--) {
             stride[i] = tot;
             tot *= (sz[i] + 1);
         }
         dat.assign(tot, T());
     }
 
-    int id(const vector<int>& p) const {
-        int res = 0;
-        for (int i = 0; i < dim; i++) res += p[i] * stride[i];
+    ll id(const array<ll, DIM>& p) const {
+        ll res = 0;
+        for (ll i = 0; i < DIM; i++) res += p[i] * stride[i];
         return res;
     }
 
-    void add(vector<int> p, T val) {
-        for (int& x : p) x++;
+    void add(array<ll, DIM> p, T val) {
+        for (ll i = 0; i < DIM; i++) p[i]++;
         dat[id(p)] += val;
     }
 
     void build() {
-        vector<int> p(dim);
-        for (int d = 0; d < dim; d++) {
-            function<void(int)> dfs = [&](int dep) {
-                if (dep == dim) {
-                    for (int x = 1; x <= sz[d]; x++) {
+        array<ll, DIM> p{};
+        for (ll d = 0; d < DIM; d++) {
+            function<void(ll)> dfs = [&](ll dep) {
+                if (dep == DIM) {
+                    for (ll x = 1; x <= sz[d]; x++) {
                         p[d] = x;
                         auto q = p;
                         q[d]--;
@@ -45,16 +44,16 @@ struct NDPrefixSum {
         }
     }
 
-    T query(const vector<int>& L, const vector<int>& R) const {
-        for (int i = 0; i < dim; i++)
+    T query(const array<ll, DIM>& L, const array<ll, DIM>& R) const {
+        for (ll i = 0; i < DIM; i++)
             if (L[i] > R[i]) return T();
         T ans = T();
-        int ALL = 1 << dim;
-        vector<int> p(dim);
+        constexpr ll ALL = 1 << DIM;
+        array<ll, DIM> p{};
 
-        for (int mask = 0; mask < ALL; mask++) {
+        for (ll mask = 0; mask < ALL; mask++) {
             bool ok = true;
-            for (int i = 0; i < dim; i++) {
+            for (ll i = 0; i < DIM; i++) {
                 if (mask >> i & 1) {
                     if (L[i] == 0) { ok = false; break; }
                     p[i] = L[i];

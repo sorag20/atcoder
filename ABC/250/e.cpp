@@ -12,6 +12,8 @@
 #include <algorithm>
 #define ll long long
 #define ull unsigned long long // 約1.84*10^19
+#define lll __int128_t // 約-1.7*10^38 ~ 1.7*10^38
+#define ulll __uint128_t // 約0 ~ 3.4*10^38
 #define ld long double
 #define P pair<int, int>
 #define lP pair<ll, ll>
@@ -46,9 +48,9 @@ template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, (ll)size(v))
 #define pob pop_back
 
 #define rrep(i,x) for(ll i=1;i<=x;i++)
-#define drep(i,x) for(ll i=x-1;i>=0;i--)
-#define nfor(i,s,n) for(ll i=s;i<n;i++)//i=s,s+1...n-1 ノーマルfor
-#define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
+#define drep(i,x) for(ll i=(x)-1;i>=0;i--)
+#define nfor(i,s,n) for(ll i=s;i<=n;i++)//i=s,s+1...n ノーマルfor
+#define dfor(i,s,n) for(ll i = s; i>=n;i--)//sスタートでnまで落ちる
 
 #define all(x) begin(x), end(x)
 #define gall(x) begin(x), end(x), greater<>()
@@ -70,7 +72,6 @@ bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
 #define parity(s) (__builtin_parity(s)) // 1のビット数が奇数個ならTrue, 偶数個ならFalseを返す。
-#define next_p(v) next_permutation(v.begin(),v.end())
 
 //---------4.グリッド系----------
 //vl dx = { 1,0,-1,0 };//vl dx={1,1,0,-1,-1,-1,0,1};
@@ -92,6 +93,7 @@ bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
 //-----------5.数学系--------------
 #define euclid(x,y) ((x)*(x)+(y)*(y))//ユークリッド距離 sqrtはしてないなので注意
 #define manhattan(x1,x2,y1,y2) (abs(x1-x2)+abs(y1-y2)) // マンハッタン距離 = |x1-x2|+|y1-y2|
+ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
 
 ll tousa_sum1(ll l, ll d, ll r) {//初項,公差,末項 で総和を求める
     ll wide = (r - l) / d + 1;
@@ -103,50 +105,51 @@ ll tousa_sum2(ll a, ll d, ll n) {//初項,交差,項数 で総和を求める
 ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
     return (r - l) / d + 1;
 }
-mint touhi_sum(mint a, mint r, ll n) {//初項,公比,項数で等比数列の総和を求める
+ll touhi_sum(ll a, ll r, ll n) {//初項,公比,項数で等比数列の総和を求める
     if (r == 1) {
         return a * n;
     }
-    mint bunsi = a * (r.pow(n) - mint(1));
-    mint bunbo = r - 1;
+    ll bunsi = a * (pw(r, n) - 1LL);
+    ll bunbo = r - 1;
     return bunsi / bunbo;
 }
 
 ll nc2(ll x) { return x * (x - 1) / 2; }
 ll nc3(ll x) { return x * (x - 1) * (x - 2) / 6; }
-ll pw(ll x, ll p) {ll res = 1;rep(i,p) res *= x;return res; }
+
+// C++の三角関数の引数はradian
+ld radian(ld deg) { return deg * (numbers::pi / 180.0); }
+ld degree(ld rad) { return rad*(180.0/numbers::pi); }
 
 //-----------6.デバックや出力系------------------
 void print(ld x) { printf("%.20Lf\n", x); }
+
+ostream& operator<<(ostream& os, __uint128_t v) {
+    if (v == 0) return os << '0';
+    string s;
+    while (v > 0) { s += char('0' + (int)(v % 10)); v /= 10; }
+    reverse(s.begin(), s.end());
+    return os << s;
+}
+ostream& operator<<(ostream& os, __int128_t v) {
+    if (v < 0) { os << '-'; return os << (__uint128_t)(-v); }
+    return os << (__uint128_t)v;
+}
 
 #define out(v) {cout<<v<<endl;}
 #define v_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<' ';cout<<endl;}//一次元配列を出力する
 #define vv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
+#define vs_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<endl;cout<<endl;}
+#define vvs_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j]<<endl;}cout<<endl;}}
+#define vvvs_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<endl;}cout<<endl;}}}
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
 
-struct ZobristHash {
-    unordered_map<ll, uint64_t> mp;
-    mt19937_64 rng;
-    ZobristHash() :rng(chrono::steady_clock::now().time_since_epoch().count()) {}
-
-    uint64_t operator()(ll x) {
-        auto it = mp.find(x);
-        if (it != mp.end()) return it->second;
-        return mp[x] = rng();
-    }
-
-    void add(uint64_t &h, ll x) {
-        h ^= (*this)(x);
-    }
-
-    void erase(uint64_t &h, ll x) {
-        h ^= (*this)(x);
-    }
-};
-
-// Zobrist Hash
+const ull mod = (1<<61) - 1;
+random_device seed_gen;
+mt19937_64 rng(seed_gen());
+// ハッシュ(集合)
 int main()
 {
     //freopen("input.txt", "r", stdin);
@@ -154,28 +157,35 @@ int main()
 
     ll n;
     cin >> n;
-    vl a(n),b(n); cin>>a; cin>>b;
-    ZobristHash zh;
-    vector<uint64_t> hashA(n + 1), hashB(n + 1);
-    set<ll> sa, sb;
-
+    vl a(n), b(n); cin>>a; cin>>b;
+    map<ll,ull> h;
     rep(i,n) {
-        hashA[i+1] = hashA[i];
-        if (sa.insert(a[i]).second)
-            zh.add(hashA[i+1], a[i]);
+        h[a[i]] = rng()%mod;
+        h[b[i]] = rng()%mod;
     }
 
+    vc<ull> sa(n+1), sb(n+1);
+    set<ll> sta, stb;
     rep(i,n) {
-        hashB[i+1] = hashB[i];
-        if (sb.insert(b[i]).second)
-            zh.add(hashB[i+1], b[i]);
+        if (!sta.count(a[i])) {
+            sa[i+1] = (sa[i]+h[a[i]])%mod;
+            sta.insert(a[i]);
+        } else {
+            sa[i+1] =sa[i];
+        }
     }
-
+    rep(i,n) {
+        if (!stb.count(b[i])) {
+            sb[i+1] = (sb[i]+h[b[i]])%mod;
+            stb.insert(b[i]);
+        } else {
+            sb[i+1] =sb[i];
+        }
+    }
     ll q; cin>>q;
     rep(qi,q) {
-        ll x,y; cin>>x>>y;
-        if (hashA[x] == hashB[y]) YN
+       ll x,y; cin>>x>>y;
+       if (sa[x] == sb[y])YN
     }
-
     return 0;
 }

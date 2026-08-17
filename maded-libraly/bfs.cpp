@@ -5,10 +5,10 @@ que.push(0);
 while(!que.empty()){
     ll v=que.front();
     que.pop();
-    for(auto c:g[v]){
-      if(dist[c]==-1) {
-          dist[c]=dist[v]+1;
-          que.push(c);
+    for(auto u:g[v]){
+      if(dist[u]==-1) {
+          dist[u]=dist[v]+1;
+          que.push(u);
       }
     }
  }
