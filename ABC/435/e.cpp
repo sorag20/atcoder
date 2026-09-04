@@ -131,7 +131,7 @@ struct S{
     ll size;
 };
 using F = long long;
-const F ID = 8e18;
+const ll ID = 8e18;
 
 S op(S a, S b){ return {a.value+b.value, a.size+b.size}; }
 S e(){ return {0, 0}; }
@@ -141,36 +141,37 @@ S mapping(F f, S x){
 }
 F composition(F f, F g){ return (f == ID ? g : f); }
 F id(){ return ID; }
+// 座標圧縮+遅延セグメント木
 int main()
 {
     //freopen("input.txt", "r", stdin);
-
-    ll n,q;
+    ll n, q;
     cin >> n >> q;
-    vc<lP> ab(q);
-    rep(i,q) {
-        ll l, r; cin>>l>>r;
-        l--;r--;
-        ab[i].first = l;
-        ab[i].second = r;
-    }
+    vl l(q), r(q);
+    rep(i, q) cin >> l[i] >> r[i];
 
-    sort(all(ab), [](const auto& x, const auto& y) {
-        auto[x_first, x_second] = x;
-        auto[y_first, y_second] = y;
-        if (x_first == y_first) return x_second > y_second;
-        return x_first < y_first;  // firstは昇順
-    }); 
-
-    ll now = 0;
-    ll cnt = 0;
-    while(1) {
-      int pos = lower_bound(all(ab), pair(now, 0)) - ab.begin();
-      if (pos == q) break;
-      cnt += ab[pos].second - now +1;
-      now = ab[pos].second;
+    vl xs;
+    rep(i, q) {
+        xs.pb(l[i]);
+        xs.pb(r[i] + 1);
     }
-    out(n - cnt);
+    sort(all(xs));
+    vc_unique(xs);
+    auto idx = [&](ll v) -> ll {
+        return lower_bound(all(xs), v) - xs.begin();
+    };
+
+    ll m = xs.size() - 1;
+    vc<S> init(m);
+    rep(i,m) init[i] = {0, xs[i + 1] - xs[i]};
+    lazy_segtree<S, op, e, F, mapping, composition, id> seg(init);
+
+    rep(qi, q) {
+        ll il = idx(l[qi]), ir = idx(r[qi] + 1);
+        seg.apply(il, ir, 1);
+        ll black = seg.all_prod().value;
+        out(n - black);
+    }
 
     return 0;
 }

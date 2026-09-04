@@ -1,3 +1,4 @@
+// nはグローバル上に宣言するため、int main()内では定義しないよう気をつける。
 ll n;
 vvc<lP> g; // g[v] = {(to, edge_id), ...}
 vl par;    // par[v]   = vの親頂点(rootは-1)

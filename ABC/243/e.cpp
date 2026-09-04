@@ -145,7 +145,7 @@ int main()
     }
     rep(i,n) d[i][i] = 0;
 
-
+    // ワーシャルフロイド法で全点間最短経路を求める
     for (ll k = 0; k < n; k++) {
         for (ll i = 0; i < n; i++) {
             for (ll j = 0; j < n; j++) {

@@ -67,10 +67,12 @@ bool chmax(ll &a, ll b) { if (a < b) { a = b; return true; } return false; }
 #define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
 #define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
 
+
 // 文字列のrotate
 //rotate(n.begin(), n.begin()+1 ,n.end());
 
 #define pop_cnt(s) ((ll)__builtin_popcountll(s))
+#define next_p(v) next_permutation(v.begin(),v.end())
 #define parity(s) (__builtin_parity(s)) // 1のビット数が奇数個ならTrue, 偶数個ならFalseを返す。
 
 //---------4.グリッド系----------

@@ -63,7 +63,7 @@ struct S{
     ll size;
 };
 using F = long long;
-const F ID = 8e18;
+const ll ID = 8e18;
 
 S op(S a, S b){ return {a.value+b.value, a.size+b.size}; }
 S e(){ return {0, 0}; }

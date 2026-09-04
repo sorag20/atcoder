@@ -1,6 +1,6 @@
 ll const INF = 1e18;
-vector<ll> dist(n, INF);
-priority_queue<lP, vector<lP>, greater<lP>> que;
+vl dist(n, INF);
+pq_g que;
 
 que.push({0, 0});
 dist[0] = 0;

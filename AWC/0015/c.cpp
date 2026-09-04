@@ -137,6 +137,7 @@ int main()
     ll ans = 0;
     rep(i,n) {
         cin>>p[i]>>q[i];
+        // ホッケースティック恒等式より、nC2がこれによって、求められる。
         ans += sports[p[i]] - sames[{p[i],q[i]}];
         sports[p[i]]++;
         sames[{p[i],q[i]}]++;
