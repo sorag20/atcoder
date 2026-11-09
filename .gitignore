@@ -1,1 +1,20 @@
+# ビルド生成物
 problem.exe
+*.exe
+*.out
+*.dSYM/
+/main
+e_test
+target/
+
+# OS / エディタ拡張のキャッシュ（ローカルパスを含む）
+.DS_Store
+.cph/
+
+# 第三者が著作権を持つコード（ローカルでのみ使用）
+live_library/
+AHC/探索アルゴリズム実践入門_sample_code/
+AHC/ahc_first_step_vol_2/
+AHC/sources/
+# AtCoder 公式のローカルテストツール（tools, tools 2, ...）
+AHC/*/tools*/
