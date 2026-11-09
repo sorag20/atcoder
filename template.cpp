@@ -104,7 +104,7 @@ ll tousa_sum1(ll l, ll d, ll r) {//初項,公差,末項 で総和を求める
 ll tousa_sum2(ll a, ll d, ll n) {//初項,交差,項数 で総和を求める
     return (a * 2 + d * (n - 1)) * n / 2;
 }
-ll kousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
+ll tousa_kousuu(ll l, ll r, ll d) {//初項,末項,交差 で等差数列の項数を求める
     return (r - l) / d + 1;
 }
 ll touhi_sum(ll a, ll r, ll n) {//初項,公比,項数で等比数列の総和を求める

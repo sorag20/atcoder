@@ -101,3 +101,7 @@ ll hld_dist(int u, int v) {
     res += fw.sum(in[u] + 1, in[v] + 1); // uの上向き辺は含めない
     return res;
 }
+
+//hld_distを使う場合は、以下をhld_buildの後に行う。
+fw = fenwick_tree<ll>(n);
+rep(v,n) if (par[v] != -1) fw.add(in[v], 1);

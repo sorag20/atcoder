@@ -125,6 +125,10 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
 
+// セグメント木上の二分探索
+ll op(ll a, ll b) { return a + b; }
+ll e() { return 0; }
+
 int main()
 {
     //freopen("input.txt", "r", stdin);
@@ -133,31 +137,45 @@ int main()
     ll n, m;
     cin >> n >> m;
     vl a(n); cin>>a;
-    map<ll,ll> mp;
-    rep(i,n) {
-        mp[a[i]]++;
-    }
-    ll ma = 0;
-    rep(i,n) {
-        chmax(ma, mp[a[i]]);
-    }
-    rep(i,m) {
-        if (!mp.count(i+1)) {
-            mp[i+1] = 0;
-        }
-    }
+    rep(i,n) a[i]--;
 
-    ll limit = 0;
-    for (auto [key, value]: mp) {
-        limit += ma - value;
-    }
-    out(limit)
     ll q; cin>>q;
+    vl ans(q);
+    vc<lP> qs;
     rep(i,q) {
         ll x; cin>>x;
-
-    
+        x--;
+        if (x < n) ans[i] = a[x];
+        else{
+            qs.pb({x,i});
+        }
+    }
+    sort(gall(qs));
+    vvl adds(n+1);
+    {
+        vl cnt(m);
+        rep(i,n) cnt[a[i]]++;
+        rep(i,m) adds[cnt[i]].pb(i);
     }
 
+    segtree<ll, op, e> seg(m);
+    ll num = 0;
+    ll l = n;
+    rep(c,n+1) {
+        for (ll i : adds[c]) seg.set(i,1), num++;
+        while (qs.size() && qs.back().first < l+num) {
+            auto [x,qi] = qs.back(); qs.pop_back();
+            ll k = x-l;
+            auto f = [&](ll s)->bool{ return s <= k; };
+            ans[qi] = seg.max_right(0, f);
+        }
+        l += num;
+    }
+    while (qs.size()) {
+        auto [x,qi] = qs.back(); qs.pop_back();
+        ans[qi] = (x-l)%m;
+    }
+
+    rep(i,q) cout << ans[i]+1 << endl;
     return 0;
 }

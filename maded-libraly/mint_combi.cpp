@@ -28,7 +28,19 @@ struct modfactinv {
   }
   mint operator[](int i) const { return d[i];}
 } ifacts;
+// 呼び出し毎にO(1)かかるが、一度O(n)かかるバージョン
+// 上のstructも必須
 mint comb(int n, int k) {
   if (n < k || k < 0) return 0;
   return facts(n)*ifacts(k)*ifacts(n-k);
+}
+
+
+// 呼び出し毎にO(k)かかるバージョン
+// これはこれだけでいい
+mint comb(ll n, int k) {
+  if (n < k || k < 0) return 0;
+  mint a = 1, b = 1;
+  rep(i,k) a *= n-i, b *= i+1;
+  return a/b;
 }

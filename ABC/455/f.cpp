@@ -124,14 +124,43 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vvv_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<' ';}cout<<endl;}}}//三次元配列を出力する
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
+struct S {
+    mint s0,s1,s2;
+};
+using F = mint;  // 作用の型（加算値）
 
+// 区間をマージする関数
+S op(S l, S r) { return {l.s0 + r.s0, l.s1 + r.s1,l.s2 + r.s2}; }
+// 単位元
+S e() { return S{0, 0, 0}; }
+// 作用を区間に適用する関数
+S mapping(F f, S x) {
+    x.s2 += x.s1*f*2 + x.s0*f*f;
+    x.s1 += x.s0*f;
+    return x;
+}
+// 作用同士を合成する関数
+F composition(F f, F g) { return f + g; }
+// 作用の単位元
+F id() { return 0; }
+// 遅延セグメント木
 int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n,q;
+    cin >> n >> q;
+    lazy_segtree<S,op,e,mint,mapping,composition,id> seg(vc<S>(n,S(1,0,0)));
+
+    rep(qi,q) {
+        ll l,r,a; cin>>l>>r>>a;
+        l--;
+        seg.apply(l,r,a);
+        S s = seg.prod(l,r);
+        mint ans = (s.s1*s.s1 - s.s2)/2;
+        out(ans.val())
+    }
 
     return 0;
 }

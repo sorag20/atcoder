@@ -1,0 +1,4 @@
+[A] iter 1697024 best est 439
+[B] init 495
+[B] iter 161152 acc 65471 best est 403
+scoreA 495 scoreB 479 scorePA 463 scorePB 456 gainA 32 gainB 23 time 1.32178

@@ -130,8 +130,25 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll t; cin>>t;
+    auto f = [&](ll a,ll b, ll x, ll y) ->ll {
+        if (a > b) swap(a,b);
+        if (x > y) swap(x,y);
+        return min(y*2*a, x*a*2+(y-x)/2*(a+b));
+    };
+    while(t--) {
+        ll a,b,x,y; cin>>a>>b>>x>>y;
+        x = abs(x), y = abs(y);
+        ll ans = 0;
+        if ((x+y)%2) {
+            ans = f(a,b,x-1,y) + a;
+            chmin(ans,f(a,b,x+1,y) + a);
+            chmin(ans,f(a,b,x,y-1) + b);
+            chmin(ans,f(a,b,x,y+1) + b);
+        } else ans = f(a,b,x,y);
+
+        out(ans)
+    }
 
     return 0;
 }

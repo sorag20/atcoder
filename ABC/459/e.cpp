@@ -125,10 +125,13 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
 
-mint comb(ll n, ll k) {
-    mint a = 1, b = 1;
-    rep(i,k) a*= n-i, b *= i+1;
-    return a/b;
+// combination mod prime
+// https://youtu.be/8uowVvQ_-Mo?t=6002
+// https://youtu.be/Tgd_zLfRZOQ?t=9928
+mint comb(ll n, int k) {
+  mint a = 1, b = 1;
+  rep(i,k) a *= n-i, b *= i+1;
+  return a/b;
 }
 int main()
 {
@@ -137,21 +140,36 @@ int main()
 
     ll n;
     cin >> n;
-    vl p(n);
+    vl p(n-1);
+    rep(i,n-1) cin>>p[i];
+    vl c(n), d(n); cin>>c; cin>>d;
+    vvl g(n);
     rep(i,n-1) {
-        cin>>p[i+1];
-        p[i+1]--;
+        p[i]--;
+        g[p[i]].pb(i+1);
     }
-    vl c(n), d(n);
-    rep(i,n) cin>>c[i];
-    rep(i,n) cin>>d[i];
 
     mint ans = 1;
-    drep(i,n) {
-        ans *= comb(c[i], d[i]);
-        c[p[i]] += c[i] - d[i];
-    }
-    out(ans.val())
+    bool z= true;
+    auto f = [&](auto f, ll v) ->ll {
+        ll remain = 0;
+        for (auto u:g[v]) {
+            remain += f(f,u);
+        }
+        remain += c[v];
+        if (remain < d[v]) {
+            z = false;
+            return 0;
+        }
+        ans *= comb(remain, d[v]);
+        remain -= d[v];
+        return remain;
+    };
+
+    f(f,0);
+    if (!z) out(0)
+    else out(ans.val());
+
 
 
     return 0;

@@ -1,3 +1,4 @@
+// N以下の素数であるか判定する配列を作成する。O(N)
 vector<bool> Eratosthenes(int N) {
     vector<bool> isprime(N+1, true);
     isprime[0] = isprime[1] = false;

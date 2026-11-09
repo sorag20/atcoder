@@ -131,14 +131,42 @@ void print(ld x) { printf("%.20Lf\n", x); }
 #define vvvs_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){ rep(k,(ll)size(v[i][j])) {cout<<v[i][j][k]<<endl;}cout<<endl;}}}
 #define vmint_cout(v){ll n = size(v);rep(i,n)cout<<v[i].val()<<endl;}//mint一次元配列を出力する
 #define vvmint_cout(v){ll n = size(v);rep(i,n){rep(j,(ll)size(v[i])){cout<<v[i][j].val()<<' ';}cout<<endl;}}//mint二次元配列を出力する
-
+// 平均最大化
 int main()
 {
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n,k; cin>>n>>k;
+    string s; cin>>s;
 
+    auto judge = [&](ld x) ->bool {
+        vld sum(n+1);
+        rep(i,n) {
+            ll now = s[i] == 'o';
+            sum[i+1] = sum[i]+ now - x;
+        }
+        ll cnt = 0;
+        ll p = 0;
+        ld minA=1e18;
+        rep(r,n) {
+            if (s[r] == 'o') cnt++;
+            while(cnt>=k) {
+                minA = min(minA,sum[p]);
+                if (s[p] == 'o')cnt--;
+                p++;
+            }
+            if (sum[r+1] - minA >= 0) return true;
+        }
+        return false;
+    };
+
+    ld ok =0, wa = 1;
+    while(ok+0.00000001<wa) {
+        ld mid = (wa+ok)/2;
+        if (judge(mid)) ok = mid;
+        else wa = mid;
+    }
+    printf("%.10Lf\n", ok);
     return 0;
 }

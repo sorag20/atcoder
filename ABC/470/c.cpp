@@ -139,39 +139,28 @@ int main()
 
     ll n,q;
     cin >> n>>q;
-    vl a(n);
-    ll ans = 0;
-    ll cnt =0;
     map<ll,ll> mp;
-    mp[0] = n;
-    ll odd = 0;
+    ll ans = 0;
     rep(qi,q) {
         ll t; cin>>t;
-        if (t ==1) {
+        if (t == 1) {
             ll x; cin>>x;
-            x--;
-            mp[a[x]]--;
-            if (mp[a[x]]%2 == 1) {
-                ans += a[x]-cnt;
-                odd++;
-            } else {
-                ans -= a[x]-cnt;
-                odd--;
-            }
-            a[x]++;
-            mp[a[x]]++;
-            if (mp[a[x]]%2 == 1) {
-                ans += a[x]-cnt;
-                odd++;
-            } else {
-                ans-= a[x]-cnt;
-                odd--;
-            }
+            ans ^= mp[x];
+            mp[x]++;
+            ans ^= mp[x];
         } else {
-            cnt++;
-            ans -= odd;
+            for (auto it = mp.begin(); it != mp.end(); ) {
+                ans ^= it->second;
+                it->second--;
+                if (it->second == 0) {
+                    it = mp.erase(it);
+                } else {
+                    ans ^= it->second;
+                    ++it;
+                }
+            }
         }
-        out(max(0LL,ans))
+        out(ans)
     }
 
     return 0;

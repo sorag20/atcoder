@@ -130,8 +130,25 @@ int main()
     //freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 
-    ll n;
-    cin >> n;
+    ll n,q;
+    cin >> n >>q;
+    ll m = q+5;
+    vvl last(2,vl(n));
+    vector cnt(2,fenwick_tree<ll>(m));
+    cnt[1].add(0,n);
+    ll ans = 0;
+    rep(qi,q) {
+        ll t,x; cin>>t>>x;
+        t--;x--;
+        ll l = last[t][x];
+        ll diff = cnt[t^1].sum(l,qi+1);
+        if (t == 0) ans += diff;
+        else ans -= diff;
+        out(ans)
+        if (t == 1 || l > 0) cnt[t].add(l,-1);
+        last[t][x] = qi+1;
+        cnt[t].add(qi+1,1);
+    }
 
     return 0;
 }
