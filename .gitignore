@@ -18,3 +18,6 @@ AHC/ahc_first_step_vol_2/
 AHC/sources/
 # AtCoder 公式のローカルテストツール（tools, tools 2, ...）
 AHC/*/tools*/
+
+# メモ（問題文のコピーなど）
+t.txt
